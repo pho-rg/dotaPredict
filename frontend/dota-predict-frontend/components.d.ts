@@ -8,6 +8,9 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    DraftBar: typeof import('./src/components/DraftBar.vue')['default']
+    HeroBan: typeof import('./src/components/HeroBan.vue')['default']
+    HeroPick: typeof import('./src/components/HeroPick.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }
