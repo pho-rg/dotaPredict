@@ -1,5 +1,5 @@
 <template>
-  <div class="hero-pick" @click="handleClick">
+  <div class="hero-pick" ref="heroPick" @click="handleClick">
     <img :src="unknownSrc" alt="unknown" class="hero-image background" />
     <img
       v-if="id"
@@ -7,9 +7,13 @@
       :alt="heroName"
       class="hero-image foreground"
     />
-    <div class="hero-name-vertical" v-if="heroName">
-  {{ heroName.toUpperCase() }}
-</div>
+    <div
+      class="hero-name-vertical"
+      v-if="heroName"
+      :style="{ fontSize: fontSize + 'px', left: leftOffset + 'px' }"
+    >
+      {{ heroName.toUpperCase() }}
+    </div>
   </div>
 </template>
 
@@ -27,6 +31,12 @@ export default {
       default: null
     }
   },
+  data() {
+    return {
+      fontSize: 25,
+      leftOffset: 0
+    }
+  },
   computed: {
     hero() {
       return heroes.find(h => h.id === this.id)
@@ -41,6 +51,30 @@ export default {
       return new URL('/src/assets/heroes/unknown.png', import.meta.url).href
     },
   },
+  mounted() {
+    const el = this.$refs.heroPick
+    if (!el) return
+
+    const updateLayout = () => {
+      const height = el.offsetHeight
+      const width = el.offsetWidth
+
+      this.fontSize = Math.max(10, Math.min(25, (height - 60) * 0.18))
+      this.leftOffset = Math.max(30, Math.min(width - 5, (width - 5) * 0.78))
+    }
+
+    this._resizeObserver = new ResizeObserver(updateLayout)
+    this._resizeObserver.observe(el)
+
+    requestAnimationFrame(() => {
+      updateLayout()
+    })
+  },
+  beforeUnmount() {
+    if (this._resizeObserver) {
+      this._resizeObserver.disconnect()
+    }
+  },
   methods: {
     handleClick() {
       if (this.onClick) this.onClick(this.id)
@@ -51,17 +85,17 @@ export default {
 
 <style scoped>
 .hero-pick {
-  width: 150px;
-  height: 250px;
+  width: calc(100% / 5 - 28px);
+  max-height: 180px;
+  aspect-ratio: 0.6;
   position: relative;
   overflow: hidden;
-  cursor: pointer;
-  clip-path: polygon( /* coin haut gauche découpé */
-    30px 0,   
+  clip-path: polygon(
+    25% 0,
     100% 0,
     100% 100%,
     0 100%,
-    0 30px   
+    0 15%
   );
 }
 
@@ -85,11 +119,9 @@ export default {
 
 .hero-name-vertical {
   position: absolute;
-  left: 78%; /* on part du bord droit */
-  bottom: -30px;
+  bottom: -13%;
   transform: rotate(-90deg);
   transform-origin: top left;
-  font-size: 25px;
   font-weight: bold;
   color: white;
   text-shadow: 0px 0px 3px black;

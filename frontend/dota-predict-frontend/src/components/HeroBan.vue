@@ -36,12 +36,12 @@ export default {
 
 <style scoped>
 .ban-frame {
-  position: relative;
-  width: 75px;
-  height: 42px;
+  width: calc(100% / 7 - 32px); /* 7 par ligne avec 6px de gap */
+  max-height: 40px;
+  aspect-ratio: 75 / 42; /* ou approx 1.7857 */
   background: #222;
+  position: relative;
   overflow: hidden;
-  cursor: pointer;
 }
 
 .ban-image {
@@ -64,23 +64,12 @@ export default {
   background: rgba(0, 0, 0, 0.4);
   z-index: 2;
 }
-/* 
-.ban-line {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: red;
-  transform: rotate(-35deg);
-  z-index: 3;
-} */
 
 .ban-line {
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 90px; 
+  width: 1000px; 
   height: 1px;
   background: red;
   transform: rotate(-27.5deg); /* angle exact calculé */
@@ -93,7 +82,7 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 25px;
+  font-size: clamp(2px, 1.5vw, 25px);
   color: #fff;
   z-index: 2;
   user-select: none;
