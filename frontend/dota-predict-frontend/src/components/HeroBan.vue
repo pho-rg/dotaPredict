@@ -82,7 +82,7 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: clamp(2px, 1.5vw, 25px);
+  font-size: clamp(2px, 1.2vw, 25px);
   color: #fff;
   z-index: 2;
   user-select: none;
