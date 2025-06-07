@@ -1,11 +1,11 @@
 <template>
   <div class="app-container">
-    <DraftPrediction />
+    <Login />
   </div>
 </template>
 
 <script setup>
-import DraftPrediction from './DraftPrediction.vue';
+import Login from './Login.vue';
 </script>
 
 <style scoped>

@@ -11,6 +11,9 @@ declare module 'vue' {
     DraftBar: typeof import('./src/components/DraftBar.vue')['default']
     HeroBan: typeof import('./src/components/HeroBan.vue')['default']
     HeroPick: typeof import('./src/components/HeroPick.vue')['default']
+    Login: typeof import('./src/components/Login.vue')['default']
+    Menu: typeof import('./src/components/menuComponent/Menu.vue')['default']
+    Register: typeof import('./src/components/Register.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

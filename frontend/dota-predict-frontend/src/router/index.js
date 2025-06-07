@@ -6,30 +6,38 @@
 
 // Composables
 import { createRouter, createWebHistory } from 'vue-router/auto'
-import { routes } from 'vue-router/auto-routes'
+import { isAuthenticated } from "../utils/auth.js";
+import Login from '../pages/Login.vue'
+import Register from '../pages/Register.vue'
+import Menu from "../pages/Menu.vue"
+import DraftPrediction from "../pages/DraftPrediction.vue"
+
+
+const routes = [
+  // public pages
+  { path: '/login', component: Login },
+  { path: '/register', component: Register },
+
+  // Common pages
+  {
+    path: '/menu',
+    component: Menu,
+    beforeEnter: (to, from, next) => {
+      if (isAuthenticated()) next()
+      else next('/login')
+    }
+  },
+  {
+    path: '/draftPrediction', component: DraftPrediction
+  },
+
+  // Default redirection
+  { path: '/:pathMatch(.*)*', redirect: '/login' },
+]
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(),
   routes,
-})
-
-// Workaround for https://github.com/vitejs/vite/issues/11804
-router.onError((err, to) => {
-  if (err?.message?.includes?.('Failed to fetch dynamically imported module')) {
-    if (localStorage.getItem('vuetify:dynamic-reload')) {
-      console.error('Dynamic import error, reloading page did not fix it', err)
-    } else {
-      console.log('Reloading page to fix dynamic import error')
-      localStorage.setItem('vuetify:dynamic-reload', 'true')
-      location.assign(to.fullPath)
-    }
-  } else {
-    console.error(err)
-  }
-})
-
-router.isReady().then(() => {
-  localStorage.removeItem('vuetify:dynamic-reload')
 })
 
 export default router
