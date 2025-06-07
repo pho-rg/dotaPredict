@@ -1,15 +1,15 @@
 <template>
   <div class="draft-prediction-container">
     <div class="content-grow">
-      <!-- ici ton contenu principal -->
+      <!-- main content -->
     </div>
 
     <div class="draftbar-container">
         <DraftBar
         v-if="isWideEnough"
-        :radiantPicks="[2, 6, 12, 8, null]"
+        :radiantPicks="[2, 6, 12, -1, null]"
         :radiantBans="[1, 5, 7, null, null, null, null]"
-        :direPicks="[16, 25, 9, 31, 19]"
+        :direPicks="[16, 25, 9, 31, null]"
         :direBans="[14, 3, 28, 23, 11, null, null]"
         :radiantWinChance="57.3"
         radiantTeam="Lyon Demons"

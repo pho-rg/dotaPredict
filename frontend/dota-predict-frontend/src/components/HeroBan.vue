@@ -72,7 +72,7 @@ export default {
   width: 1000px; 
   height: 1px;
   background: red;
-  transform: rotate(-27.5deg); /* angle exact calculé */
+  transform: rotate(-27.5deg);
   transform-origin: left bottom;
   z-index: 3;
 }

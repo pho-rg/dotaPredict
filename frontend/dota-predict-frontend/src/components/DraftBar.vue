@@ -6,7 +6,7 @@
           <HeroBan v-for="(id, i) in radiantBans" :key="'rb'+i" :id="id" />
         </div>
         <div class="d-flex flex-wrap mt-2" style="gap: 8px;">
-          <HeroPick v-for="(id, i) in radiantPicks" :key="'rp'+i" :id="id" />
+          <HeroPick v-for="(id, i) in radiantPicks" :key="'rp'+i" :id="id" :onClick="()=>pickOnClick(id)" />
         </div>
         
       </v-col>
@@ -23,7 +23,7 @@
           <HeroBan v-for="(id, i) in [...this.direBans].reverse()" :key="'db' + (direBans.length - 1 - i)" :id="id" />
         </div>
         <div class="d-flex flex-wrap justify-end mt-2" style="gap: 8px;">
-          <HeroPick v-for="(id, i) in [...this.direPicks].reverse()" :key="'dp' + (direPicks.length - 1 - i)" :id="id" />
+          <HeroPick v-for="(id, i) in [...this.direPicks].reverse()" :key="'dp' + (direPicks.length - 1 - i)" :id="id" :onClick="()=>pickOnClick(id)" />
         </div>
         
       </v-col>
@@ -91,7 +91,7 @@ export default {
       predictionValueSize: 18,
       predictionBarHeight: 6,
       predictionTitleSize: 30,
-      vsTitleSize: 70
+      vsTitleSize: 90
     }
   },
   mounted() {
@@ -105,14 +105,22 @@ export default {
     updateSizes() {
       this.containerWidth = this.$el.offsetWidth || window.innerWidth;
 
-      // Exemple de calcul, à ajuster selon rendu souhaité
-      // On fixe une taille minimum et maximum, mais la taille suit la largeur du container
-      this.teamTitleSize = Math.min(Math.max(this.containerWidth * 0.02, 12), 30); // entre 12px et 30px
-      this.teamNameSize = Math.min(Math.max(this.containerWidth * 0.01, 10), 20); // entre 10px et 20px
-      this.predictionValueSize = Math.min(Math.max(this.containerWidth * 0.01, 10), 18); // entre 10px et 18px
-      this.predictionBarHeight = Math.min(Math.max(this.containerWidth * 0.0045, 2), 6); // entre 2px et 6px
-      this.vsTitleSize = Math.min(Math.max(this.containerWidth * 0.04, 12), 70); // entre 12px et 30px
-      this.predictionTitleSize = Math.min(Math.max(this.containerWidth * 0.015, 10), 25); // entre 10px et 20px
+      // fix dimensions proportions
+      this.teamTitleSize = Math.min(Math.max(this.containerWidth * 0.02, 12), 30); // 12px - 30px
+      this.teamNameSize = Math.min(Math.max(this.containerWidth * 0.01, 10), 20); // 10px - 20px
+      this.predictionValueSize = Math.min(Math.max(this.containerWidth * 0.01, 10), 18); // 10px - 18px
+      this.predictionBarHeight = Math.min(Math.max(this.containerWidth * 0.0045, 2), 6); // 2px - 6px
+      this.vsTitleSize = Math.min(Math.max(this.containerWidth * 0.06, 10), 90); // 10px - 90px
+      this.predictionTitleSize = Math.min(Math.max(this.containerWidth * 0.015, 10), 25); // 10px - 25px
+    },
+    pickOnClick(id) {
+      if (id > 0) {
+        console.log("hero :", id);
+      } else if (id === -1) {
+        console.log("waiting for the player's pick...");
+      } else if (id === -2) {
+        console.log("waiting for analyst input");
+      }
     }
   }
 }
@@ -123,7 +131,7 @@ export default {
   padding-block: 1%;
   padding-inline: 3%;
   position: relative;
-  z-index: 1; 
+  z-index: 1;
 
   &::before {
     content: '';
@@ -132,13 +140,29 @@ export default {
     left: 3%;
     right: 3%;
     height: 60%;
-    background: radial-gradient(
-      ellipse at center,
-      #5A1819 0%,
-      #191314 60%,
-      #191314 100%
+    background: linear-gradient(
+      to right,
+      #130f0f 0%,
+      #2e0c0c 49.9%,
+      #2e0c0c 51.1%,
+      #130f0f 100%
     );
-    z-index: -1; 
+    background-size: 200% 100%;
+    background-position: 100% 0;
+    animation: aura-move 6s ease-in-out infinite;
+    z-index: -1;
+  }
+}
+
+@keyframes aura-move {
+  0% {
+    background-position: 100% 0;
+  }
+  50% {
+    background-position: 0% 0;
+  }
+  100% {
+    background-position: 100% 0;
   }
 }
 
@@ -149,12 +173,13 @@ export default {
 .vs-title {
   font-family: 'Mohave', sans-serif;
   font-weight: 600;
+  margin-bottom: -6px;
   letter-spacing: 0.2rem !important;
 }
 
 .prediction-title {
-  border-bottom: 2px solid white;
-  padding-bottom: 3%;
+  border-bottom: 1px solid white;
+  padding-bottom: 1%;
   width: 70%;
   font-family: 'Mohave', sans-serif;
 }
@@ -162,6 +187,7 @@ export default {
 .prediction-text {
   font-family: 'Mohave', sans-serif;
 }
+
 .prediction-container {
   width: 100%;
 }
