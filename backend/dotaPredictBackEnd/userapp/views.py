@@ -92,7 +92,7 @@ def register(request):
         return Response({'detail': 'All fields are required.'}, status=status.HTTP_400_BAD_REQUEST)
 
     if password != confirmPassword:
-        return Response({'detail': 'Passwords do not match.'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'detail': 'Passwords do not match.'}, status=status.HTTP_412_PRECONDITION_FAILED)
 
     if User.objects.filter(email=email).exists():
         return Response({'detail': 'Email already registered.'}, status=status.HTTP_400_BAD_REQUEST)
@@ -127,9 +127,11 @@ def login(request):
     if not check_password(password, user.password):
         return Response({'detail': 'Invalid credentials.'}, status=status.HTTP_401_UNAUTHORIZED)
 
-    access = AccessToken.for_user(user)
+    token = AccessToken.for_user(user)
+    token['id'] = user.id
+    token['role'] = user.role
     return Response({
-        'access': str(access),
+        'token': str(token),
         'user': {
             'id': user.id,
             'email': user.email,
