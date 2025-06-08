@@ -18,7 +18,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8000/api/user/getall/",
+							"raw": "localhost:8000/api/user/getAll/",
 							"host": [
 								"localhost"
 							],
@@ -26,7 +26,7 @@
 							"path": [
 								"api",
 								"user",
-								"getall",
+								"getAll",
 								""
 							]
 						}
@@ -107,7 +107,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"bbb@aaa.com\",\r\n    \"password\": \"bbb\"\r\n}",
+							"raw": "{\r\n    \"email\": \"aaa@aaa.com\",\r\n    \"password\": \"aaa\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -140,7 +140,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"bbb\",\r\n    \"email\": \"bbb@aaa.com\",\r\n    \"password\": \"bbb\",\r\n    \"confirmPassword\": \"bbb\"\r\n}",
+							"raw": "{\r\n    \"name\": \"aaa\",\r\n    \"email\": \"aaa@aaa.com\",\r\n    \"password\": \"aaa\",\r\n    \"confirmPassword\": \"aaa\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -237,33 +237,367 @@
 			]
 		},
 		{
-			"name": "https://api.steampowered.com/IDOTA2Match_570/GetLiveLeagueGames/v1/?key=08C15481FFF192013766F709497C5D43",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "https://api.steampowered.com/IDOTA2Match_570/GetLiveLeagueGames/v1/?key=08C15481FFF192013766F709497C5D43",
-					"protocol": "https",
-					"host": [
-						"api",
-						"steampowered",
-						"com"
-					],
-					"path": [
-						"IDOTA2Match_570",
-						"GetLiveLeagueGames",
-						"v1",
-						""
-					],
-					"query": [
-						{
-							"key": "key",
-							"value": "08C15481FFF192013766F709497C5D43"
+			"name": "Match",
+			"item": [
+				{
+					"name": "getLiveLeagueGames",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"bbb@aaa.com\",\r\n    \"password\": \"bbb\"\r\n}"
+						},
+						"url": {
+							"raw": "localhost:8000/api/match/steam/getLiveLeagueGames/",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"match",
+								"steam",
+								"getLiveLeagueGames",
+								""
+							]
 						}
-					]
+					},
+					"response": []
+				},
+				{
+					"name": "getParsedLiveMatches",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"bbb@aaa.com\",\r\n    \"password\": \"bbb\"\r\n}"
+						},
+						"url": {
+							"raw": "localhost:8000/api/match/getParsedLiveMatches",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"match",
+								"getParsedLiveMatches"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAll",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/match/getAll/",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"match",
+								"getAll",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAll Copy",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/match/getMatchesInDraft/",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"match",
+								"getMatchesInDraft",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAll Copy",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/match/getOne/:match_id/",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"match",
+								"getOne",
+								":match_id",
+								""
+							],
+							"variable": [
+								{
+									"key": "match_id",
+									"value": "8326937055"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "saveLiveMatches",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/match/saveLiveMatches/",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"match",
+								"saveLiveMatches",
+								""
+							]
+						}
+					},
+					"response": []
 				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5NDAzNDIzLCJpYXQiOjE3NDk0MDE2MjMsImp0aSI6ImUxMjA1MDRlYmQ5MjQwNmQ4OWNhNWZmMDBjZDI0NTk2IiwidXNlcl9pZCI6MSwiaWQiOjEsInJvbGUiOiJ2aWV3ZXIifQ.FUzqoyqwTE5_kXsViwwtweCfx3PhXyQGl0LVM7WNrcY",
+						"type": "string"
+					}
+				]
 			},
-			"response": []
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Hero",
+			"item": [
+				{
+					"name": "getOpendotaHeroes",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"bbb@aaa.com\",\r\n    \"password\": \"bbb\"\r\n}"
+						},
+						"url": {
+							"raw": "localhost:8000/api/hero/opendota/getOpendotaHeroes/",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"hero",
+								"opendota",
+								"getOpendotaHeroes",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getParsedHeroes",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"bbb@aaa.com\",\r\n    \"password\": \"bbb\"\r\n}"
+						},
+						"url": {
+							"raw": "localhost:8000/api/hero/getParsedHeroes/",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"hero",
+								"getParsedHeroes",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getHeroes",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"bbb@aaa.com\",\r\n    \"password\": \"bbb\"\r\n}"
+						},
+						"url": {
+							"raw": "localhost:8000/api/hero/getHeroes/",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"hero",
+								"getHeroes",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getHero",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"bbb@aaa.com\",\r\n    \"password\": \"bbb\"\r\n}"
+						},
+						"url": {
+							"raw": "localhost:8000/api/hero/getHero/:id/",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"hero",
+								"getHero",
+								":id",
+								""
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "120"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "saveHeroes",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/hero/saveHeroes/",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"hero",
+								"saveHeroes",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
