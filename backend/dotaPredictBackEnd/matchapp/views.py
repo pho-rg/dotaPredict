@@ -15,7 +15,7 @@ def steamGetLiveLeagueGames(request):
         return JsonResponse({'error': str(e)}, status=500)
 
 @api_view(['GET'])
-def getLiveMatches(request):
+def getParsedLiveMatches(request):
     try:
         parsed_matches = get_parsed_live_matches()
         return JsonResponse(parsed_matches, safe=False)

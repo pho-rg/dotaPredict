@@ -2,6 +2,7 @@
 echo "Create migrations"
 python manage.py makemigrations userapp
 python manage.py makemigrations matchapp
+python manage.py makemigrations heroapp
 echo "==============="
 
 echo "Migrate"

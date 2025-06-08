@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'userapp',
     'matchapp',
+    'heroapp',
     'rest_framework',
     'corsheaders'
 ]
