@@ -6,7 +6,7 @@
 
 // Composables
 import { createRouter, createWebHistory } from 'vue-router/auto'
-import { isAuthenticated } from "../utils/auth.js";
+import { isAuthenticated } from "../utils/auth.js"
 import Login from '../pages/Login.vue'
 import Register from '../pages/Register.vue'
 import Menu from "../pages/Menu.vue"

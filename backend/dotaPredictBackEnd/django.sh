@@ -1,6 +1,7 @@
 #!/bin/bash
 echo "Create migrations"
 python manage.py makemigrations userapp
+python manage.py makemigrations matchapp
 echo "==============="
 
 echo "Migrate"

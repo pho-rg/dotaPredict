@@ -19,5 +19,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('dotapredict/', include('userapp.urls')),
+    path('api/user/', include('userapp.urls')),
+    path('api/match/', include('matchapp.urls')),
 ]

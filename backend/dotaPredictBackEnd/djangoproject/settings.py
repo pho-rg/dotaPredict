@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'userapp',
+    'matchapp',
     'rest_framework',
     'corsheaders'
 ]
@@ -56,7 +57,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'userapp.urls'
+ROOT_URLCONF = 'djangoproject.urls'
 
 TEMPLATES = [
     {
