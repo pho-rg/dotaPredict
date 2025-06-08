@@ -4,9 +4,10 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('steam/GetLiveLeagueGames', views.SteamGetLiveLeagueGames),
-    #path('getMatches/<str:pk>/', views.getMatches),
-    #path('getMatch/<str:pk>/', views.getMatch),
-    #path('getMatchesInDraft/', views.getInDraftMatches),
-    #path('isMatchInDraft/<str:pk>/', views.isMatchInDraft),
+    path('steam/getLiveLeagueGames/', views.steamGetLiveLeagueGames),
+    path('getParsedLiveMatches/', views.getParsedLiveMatches),
+    path('saveLiveMatches/', views.saveLiveMatches),
+    path('getAll/', views.getMatches),
+    path('getOne/<str:id>/', views.getMatch),
+    path('getMatchesInDraft/', views.getInDraftMatches),
 ]

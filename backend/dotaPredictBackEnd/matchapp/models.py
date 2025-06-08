@@ -5,7 +5,7 @@ class Match(models.Model):
     match_id = models.BigIntegerField(unique=True)
     radiant_team = models.CharField(max_length=50)
     dire_team = models.CharField(max_length=50)
-    is_draft_in_progress = models.BooleanField(default=False)
+    draft_in_progress = models.BooleanField(default=False)
     radiant_win_chance = models.FloatField(default=0.5)
     radiant_pick1 = models.IntegerField()
     radiant_pick2 = models.IntegerField()
