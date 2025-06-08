@@ -13,6 +13,20 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os # interact with operating system
 from pathlib import Path
 from datetime import timedelta
+from dotenv import load_dotenv
+
+# .env file
+load_dotenv()
+
+STEAM_API_KEY = os.environ.get('STEAM_API_KEY')
+
+DOTAPREDICT_DB = os.environ.get('DOTAPREDICT_DB')
+DOTAPREDICT_USER = os.environ.get('DOTAPREDICT_USER')
+DOTAPREDICT_PASSWORD = os.environ.get('DOTAPREDICT_PASSWORD')
+DOTAPREDICT_HOST = os.environ.get('DOTAPREDICT_HOST')
+DOTAPREDICT_PORT = os.environ.get('DOTAPREDICT_PORT')
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,6 +54,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'userapp',
+    'matchapp',
     'rest_framework',
     'corsheaders'
 ]
@@ -56,7 +71,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'userapp.urls'
+ROOT_URLCONF = 'djangoproject.urls'
 
 TEMPLATES = [
     {
@@ -82,11 +97,11 @@ WSGI_APPLICATION = 'djangoproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': os.environ.get('DB_DRIVER', 'django.db.backends.postgresql'),
-        'NAME': os.environ.get('DOTAPREDICT_DB', 'postgres'),
-        'USER': os.environ.get('DOTAPREDICT_USER', 'postgres'),
-        'PASSWORD': os.environ.get('DOTAPREDICT_PASSWORD', 'postgres'),
-        'HOST': os.environ.get('DOTAPREDICT_HOST', 'localhost'),
-        'PORT': os.environ.get('DOTAPREDICT_PORT', '5432'),
+        'NAME': os.environ.get('DOTAPREDICT_DB', DOTAPREDICT_DB),
+        'USER': os.environ.get('DOTAPREDICT_USER', DOTAPREDICT_USER),
+        'PASSWORD': os.environ.get('DOTAPREDICT_PASSWORD', DOTAPREDICT_PASSWORD),
+        'HOST': os.environ.get('DOTAPREDICT_HOST', DOTAPREDICT_HOST),
+        'PORT': os.environ.get('DOTAPREDICT_PORT', DOTAPREDICT_PORT),
     }
 }
 

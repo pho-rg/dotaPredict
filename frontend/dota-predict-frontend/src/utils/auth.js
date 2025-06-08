@@ -1,12 +1,12 @@
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode'
 
 export function isAuthenticated () {
   // check expiration date
-  const token = localStorage.getItem('token');
-  if (!token) return false;
-  const decoded = jwtDecode(token);
-  const currentTime = Math.floor(Date.now() / 1000); // en secondes
-  return decoded.exp > currentTime;
+  const token = localStorage.getItem('token')
+  if (!token) return false
+  const decoded = jwtDecode(token)
+  const currentTime = Math.floor(Date.now() / 1000) // en secondes
+  return decoded.exp > currentTime
 }
 
 export function getUserRole () {
@@ -18,13 +18,13 @@ export function getToken () {
 }
 
 export function setAuthInfo (token) {
-  const decoded = jwtDecode(token);
-  const role = decoded.role || 'viewer';
-  localStorage.setItem('token', token);
-  localStorage.setItem('role', role);
+  const decoded = jwtDecode(token)
+  const role = decoded.role || 'viewer'
+  localStorage.setItem('token', token)
+  localStorage.setItem('role', role)
 }
 
 export function logout () {
-  localStorage.removeItem('token');
-  localStorage.removeItem('role');
+  localStorage.removeItem('token')
+  localStorage.removeItem('role')
 }

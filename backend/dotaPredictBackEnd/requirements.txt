@@ -4,3 +4,5 @@ djangorestframework==3.12.4
 bcrypt
 djangorestframework-simplejwt
 django-cors-headers
+requests
+python-dotenv==0.21.1

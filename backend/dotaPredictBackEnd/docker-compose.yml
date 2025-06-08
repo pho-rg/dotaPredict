@@ -1,7 +1,7 @@
 
 services:
-  djangoapp:
-    container_name: userapp
+  dotapredict-api:
+    container_name: dotapredict-api
     build: .
     ports:
       - "8000:8000"

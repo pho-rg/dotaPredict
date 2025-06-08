@@ -33,14 +33,9 @@ Folder
 cd \backend\dotaPredictBackEnd\
 ```
 
-Build project
+Build project & start container
 ```
-docker compose build djangoapp
-```
-
-Start container
-```
-docker compose up djangoapp
+docker compose up dotapredict-api --build
 ```
 
 Stop container
