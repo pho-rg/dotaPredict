@@ -57,7 +57,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "2"
+									"value": "1"
 								}
 							]
 						}
@@ -74,7 +74,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"bbb\",\r\n    \"email\": \"bbb@aaa.com\",\r\n    \"role\": \"viewer\",\r\n    \"password\": \"bbb\"\r\n}",
+							"raw": "{\r\n    \"name\": \"eee\",\r\n    \"email\": \"eee@aaa.com\",\r\n    \"role\": \"analyst\",\r\n    \"password\": \"eee\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -173,7 +173,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"ccc\",\r\n    \"email\": \"ccc@aaa.com\",\r\n    \"role\": \"analyst\",\r\n    \"password\": \"ccc\"\r\n}",
+							"raw": "{\r\n    \"name\": \"Lola Arguinn\",\r\n    \"email\": \"aaa@aaa.com\",\r\n    \"role\": \"analyst\",\r\n    \"password\": \"aaa\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -196,7 +196,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "3"
+									"value": "1"
 								}
 							]
 						}
@@ -326,6 +326,30 @@
 					"response": []
 				},
 				{
+					"name": "getAllLive",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/match/getAllLive/",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"match",
+								"getAllLive",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "getMatchInDraft",
 					"request": {
 						"auth": {
@@ -373,7 +397,7 @@
 							"variable": [
 								{
 									"key": "match_id",
-									"value": "8326937055"
+									"value": "8327823625"
 								}
 							]
 						}
