@@ -1,5 +1,5 @@
 <template>
-  <div class="login-box">
+  <v-container class="login-container">
     <form @submit.prevent="handleLogin" class="login-form">
       <h2 class="title">Login</h2>
 
@@ -36,7 +36,7 @@
         <button type="submit" class="login-button">Login</button>
       </div>
     </form>
-  </div>
+  </v-container>
 </template>
 
 <script setup>
@@ -57,7 +57,7 @@ const handleLogin = async () => {
 </script>
 
 <style scoped>
-.login-box {
+.login-container {
   background-color: #404040;
   border-radius: 25px;
   padding: 2rem;

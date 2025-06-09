@@ -23,3 +23,14 @@ export const login = async formData => {
     return false
   }
 }
+
+export const getUsername = async () => {
+  try {
+    console.log(localStorage.getItem("id"))
+    const response = await axios.get(AUTH_URL + 'getOne/' + localStorage.getItem("id"))
+    return response.data
+  } catch (error) {
+    console.error('Retrieve username error', error)
+    return { name: 'noName' }
+  }
+}
