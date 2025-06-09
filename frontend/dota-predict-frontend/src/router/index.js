@@ -25,10 +25,15 @@ const routes = [
     beforeEnter: (to, from, next) => {
       if (isAuthenticated()) next()
       else next('/login')
-    }
+    },
   },
   {
-    path: '/draftPrediction', component: DraftPrediction
+    path: `/draftPrediction/:matchId`,
+    component: DraftPrediction,
+    beforeEnter: (to, from, next) => {
+      if (isAuthenticated()) next()
+      else next('/login')
+    },
   },
 
   // Default redirection

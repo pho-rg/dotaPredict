@@ -1,7 +1,7 @@
 <template>
   <div class="draft-prediction-container">
     <div class="content-grow">
-      <!-- main content -->
+      <HeaderBar />
     </div>
 
     <div class="draftbar-container">
@@ -26,6 +26,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import DraftBar from '/src/components/DraftBar.vue'
+import HeaderBar from "@/components/HeaderBar.vue";
 
 const isWideEnough = ref(window.innerWidth >= 1024)
 
