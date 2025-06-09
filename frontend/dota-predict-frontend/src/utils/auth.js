@@ -17,14 +17,21 @@ export function getToken () {
   return localStorage.getItem('token')
 }
 
+export function getUserId () {
+  return localStorage.getItem('id')
+}
+
 export function setAuthInfo (token) {
   const decoded = jwtDecode(token)
   const role = decoded.role || 'viewer'
+  const id = decoded.id || 0
   localStorage.setItem('token', token)
   localStorage.setItem('role', role)
+  localStorage.setItem('id', id)
 }
 
 export function logout () {
   localStorage.removeItem('token')
   localStorage.removeItem('role')
+  localStorage.removeItem('id')
 }
