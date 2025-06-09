@@ -143,8 +143,8 @@ export default {
     background: linear-gradient(
       to right,
       #130f0f 0%,
-      #2e0c0c 49.9%,
-      #2e0c0c 51.1%,
+      #491313 49.9%,
+      #491313 51.1%,
       #130f0f 100%
     );
     background-size: 200% 100%;

@@ -9,7 +9,7 @@
       <v-col class="right-align">
         <span class="username">{{ userName }}</span>
         <v-btn class="logout-btn" color="#912728" flat @click="handleLogout">
-          <img class="logout-icon" src="../assets/logout-icon.png" />
+          <v-icon icon="mdi-logout" size="24" class="logout-icon" />
         </v-btn>
       </v-col>
     </v-row>
@@ -42,10 +42,17 @@
 <style scoped>
 .headerbar-container {
   display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-inline: 1.5%;
 }
 
 .right-align {
   text-align: right;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: end;
 }
 
 .title {
@@ -55,20 +62,25 @@
 }
 
 .username {
-  font-size: 20px;
+  font-size: 24px;
   font-family: 'Mohave', sans-serif;
   font-weight: bold;
 }
 
 .logout-btn {
-  min-width: auto;
-  bottom: 4px;
-  margin-left: 15px;
+  min-width: 50px;
+  height: 50px;
+  width: 50px;
+  margin-left: 20px;
   border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
 }
 
 .logout-icon {
-  width: 15px;
-  height: 15px;
+  width: 20px;
+  height: 20px;
 }
 </style>

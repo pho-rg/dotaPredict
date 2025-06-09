@@ -37,7 +37,7 @@ const routes = [
   },
 
   // Default redirection
-  { path: '/:pathMatch(.*)*', redirect: '/login' },
+  { path: '/:pathMatch(.*)*', redirect: '/menu' },
 ]
 
 const router = createRouter({

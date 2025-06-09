@@ -6,14 +6,14 @@
 
     <div class="draftbar-container">
         <DraftBar
-        v-if="isWideEnough"
-        :radiantPicks="[2, 6, 12, -1, null]"
-        :radiantBans="[1, 5, 7, null, null, null, null]"
-        :direPicks="[16, 25, 9, 31, null]"
-        :direBans="[14, 3, 28, 23, 11, null, null]"
-        :radiantWinChance="57.3"
-        radiantTeam="Lyon Demons"
-        direTeam="STe ESPORT"
+          v-if="isWideEnough"
+          :radiantPicks="[2, 6, 12, 45, 0]"
+          :radiantBans="[1, 5, 7, 0, 0, 0, 0]"
+          :direPicks="[16, 25, 9, 31, -1]"
+          :direBans="[14, 3, 28, 23, 11, 0, 0]"
+          :radiantWinChance="57.3"
+          radiantTeam="Lyon Demons"
+          direTeam="STe ESPORT"
         />
         <div v-else class="draftbar-warning">
             <v-icon icon="mdi-monitor-screenshot" size="36" class="mr-4" />
