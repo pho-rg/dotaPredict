@@ -14,9 +14,8 @@ from .serializers import UserSerializer
 @api_view(['GET'])
 def getUsers(request):
     try:
-        users = User.objects.all()
-        serializer = UserSerializer(users, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        users = User.objects.values('name', 'email', 'role')
+        return Response(list(users), status=status.HTTP_200_OK)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -24,11 +23,10 @@ def getUsers(request):
 @api_view(['GET'])
 def getUser(request, pk):
     try:
-        user = User.objects.get(id=pk)
-        serializer = UserSerializer(user, many=False)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    except User.DoesNotExist:
-        return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+        user = User.objects.filter(id=pk).values('name', 'email', 'role').first()
+        if user is None:
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+        return Response(user, status=status.HTTP_200_OK)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -130,11 +128,13 @@ def login(request):
     token = AccessToken.for_user(user)
     token['id'] = user.id
     token['role'] = user.role
+    token['name'] = user.name
     return Response({
         'token': str(token),
         'user': {
             'id': user.id,
             'email': user.email,
             'role': user.role,
+            'name': user.name,
         }
     }, status=status.HTTP_200_OK)

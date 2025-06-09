@@ -18,18 +18,12 @@
 <script setup>
   import { onMounted, ref } from 'vue'
   import router from '../router/index.js'
-  import { getUsername } from '../service/authService.js'
-  import { logout } from '../utils/auth.js'
+  import { getName, logout } from '../utils/auth.js'
 
   const userName = ref('')
 
-  const fetchUserName = async () => {
-    try {
-      const data = await getUsername()
-      userName.value = data.name
-    } catch (error) {
-      console.error('Failed to retrieve username', error)
-    }
+  const fetchUserName = () => {
+    userName.value = getName()
   }
 
   const handleLogout = () => {
