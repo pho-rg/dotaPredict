@@ -25,6 +25,12 @@ def getParsedLiveMatches(request):
 @api_view(['POST'])
 def saveLiveMatches(request):
     try:
+        # reset draft in progress field
+        #Match.objects.update(draft_in_progress=False)
+        # TODO modify model to add createdAt and display today matches
+        # temporary deleting datas to have only live matches in table
+        Match.objects.all().delete()
+
         parsed_matches = get_parsed_live_matches()
         created_count = 0
         updated_count = 0
