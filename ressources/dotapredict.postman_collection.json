@@ -326,7 +326,7 @@
 					"response": []
 				},
 				{
-					"name": "getAll Copy",
+					"name": "getMatchInDraft",
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -350,7 +350,7 @@
 					"response": []
 				},
 				{
-					"name": "getAll Copy",
+					"name": "getOne",
 					"request": {
 						"auth": {
 							"type": "noauth"
