@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 class Match(models.Model):
+    createdAt = models.DateTimeField(auto_now_add=True)
     match_id = models.BigIntegerField(unique=True)
     radiant_team = models.CharField(max_length=50)
     dire_team = models.CharField(max_length=50)

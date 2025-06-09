@@ -2,11 +2,11 @@ import axios from 'axios'
 
 const MATCH_URL = import.meta.env.VITE_API_URL + 'match/'
 
-export const getAllMatches = async () => {
+export const getAllLiveMatches = async () => {
   try {
     await retrieveLiveMatches()
 
-    const response = await axios.get(MATCH_URL + 'getAll')
+    const response = await axios.get(MATCH_URL + 'getAllLive/')
     return response.data
   } catch (error) {
     console.error('Failed to fetch matches', error)

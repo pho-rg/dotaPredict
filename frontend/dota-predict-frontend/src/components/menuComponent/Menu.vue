@@ -29,13 +29,13 @@
 <script setup>
   import { onMounted, ref } from 'vue'
   import router from '../../router/index.js'
-  import { getAllMatches } from '../../service/matchService.js'
+  import { getAllLiveMatches } from '../../service/matchService.js'
 
   const matches = ref([])
 
   const fetchMatches = async () => {
     try {
-      const data = await getAllMatches()
+      const data = await getAllLiveMatches()
       matches.value = data
     } catch (error) {
       console.error('Failed to fetch matches', error)

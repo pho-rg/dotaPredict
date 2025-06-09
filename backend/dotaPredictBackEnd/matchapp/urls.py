@@ -8,6 +8,7 @@ urlpatterns = [
     path('getParsedLiveMatches/', views.getParsedLiveMatches),
     path('saveLiveMatches/', views.saveLiveMatches),
     path('getAll/', views.getMatches),
+    path('getAllLive/', views.getTodayMatches),
     path('getOne/<str:id>/', views.getMatch),
     path('getMatchesInDraft/', views.getInDraftMatches),
 ]

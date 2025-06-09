@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
+from django.utils.timezone import now
 
 from .models import Match
 from .service import fetch_steam_live_league_games, get_parsed_live_matches
@@ -89,6 +90,15 @@ def saveLiveMatches(request):
 def getMatches(request):
     try:
         matches = Match.objects.all().values()
+        return JsonResponse(list(matches), safe=False)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+@api_view(['GET'])
+def getTodayMatches(request):
+    try:
+        today = now().date()
+        matches = Match.objects.filter(createdAt__date=today).values()
         return JsonResponse(list(matches), safe=False)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
