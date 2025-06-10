@@ -48,8 +48,8 @@ def main():
     matches = openJson(r"C:\Users\issam\Documents\ProjetAnnuelAI\DotaMatchsData\SauvgardeProMatchs2025-05-21.json")
     df = pd.DataFrame(matches)
 
-    df_transformedDire = df.apply(lambda row: transformationHeroes(row, 'picks_id_team_1', 'dire'), axis=1)
     df_transformedRadiant = df.apply(lambda row: transformationHeroes(row, 'picks_id_team_0', 'radiant'), axis=1)
+    df_transformedDire = df.apply(lambda row: transformationHeroes(row, 'picks_id_team_1', 'dire'), axis=1)
     dfTest = pd.concat([df_transformedRadiant, df_transformedDire], axis=1)
 
     print('debut Apprentissage')
