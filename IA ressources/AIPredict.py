@@ -1,7 +1,5 @@
 import pandas as pd
 import xgboost as xgb
-from gensim.corpora import Dictionary
-
 
 def transformation_heroes(row, team_col, team):
     dfOut = pd.Series([False] * 146, index=[f'picks_team_{team}_{i}' for i in range(146)])
@@ -25,8 +23,9 @@ def predict_dota(match):
 
     model=xgb.XGBClassifier()
     model.load_model("dota_xgboost.json")
-    predict = {"Gagnant":model.predict(df_match_predict), "Probabilité":model.predict_proba(df_match_predict)}
-    return predict
+
+    return {"Gagnant":model.predict(df_match_predict), "Probabilité":model.predict_proba(df_match_predict)}
+
 
 
 

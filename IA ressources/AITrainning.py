@@ -11,10 +11,8 @@ from sklearn.ensemble import HistGradientBoostingClassifier
 import xgboost as xgb
 
 def openJson(path):
-
     with open (path) as json_file:
         data = json.load(json_file)
-
     return data
 
 def transformationHeroes(row, team_col, team):
@@ -22,19 +20,6 @@ def transformationHeroes(row, team_col, team):
     for hero_id in row[team_col]:
         dfOut[f'picks_team_{team}_{hero_id}'] = True
     return dfOut
-
-def transformationHeroesNew(row, team_col, team):
-    dfOut = pd.Series([False] * 146, index=[f'picks_team_{team}_{i}' for i in range(146)])
-    for hero_id in row[team_col]:
-        dfOut[f'picks_team_{team}_{hero_id}'] = True
-    return dfOut
-
-def transFormationVictoires(liste_bools):
-    df = pd.DataFrame()
-    df['radiant_win'] = [bool(x) for x in liste_bools]
-    df['dire_win'] = [not bool(x) for x in liste_bools]
-    return df
-
 
 def creerDataframe(datas):
     dfOut = pd.DataFrame()
@@ -52,11 +37,7 @@ def saveDataFrameToJson(matches):
 
 def main():
 
-    #match1=[[38,103,27,94,55],[10,64,131,19,129]]
-    #match1=[[1,4,3,4,5],[10,64,131,19,129]]
-    #match1 = [[10,64,131,19,129], [1,4,3,4,5]]
-    #match1 = [[38,103,27,94,55], [1,4,3,4,5]]
-    match1 = [[38,103,27], [1,2,6,3]]
+    match1=[[38,103,27,94,55],[10,64,131,19,129]]
     dfTestMatch = creerDataframe(match1)
 
     df_testM_match_dire = dfTestMatch.apply(lambda row: transformationHeroes(row, 'picks_team_1', 'dire'), axis=1)
@@ -89,10 +70,8 @@ def main():
     model.save_model("dota_xgboost.json")
     y_pred = model.predict(X_test)
     print('fin apprentissage')
-    print(len(df))
     print("Accuracy:", accuracy_score(y_test, y_pred))
     print("Classification Report:\n", classification_report(y_test, y_pred))
-
 
     prediction=model.predict(dfTestMatch)
     prediction_pourcent=model.predict_proba(dfTestMatch)
