@@ -200,4 +200,7 @@ export default {
   transform: translate(-50%, -50%);
   z-index: 3;
 }
+::v-deep(.v-progress-circular__overlay) {
+  animation-duration: 4s !important; /* slow down loading animation */
+}
 </style>
