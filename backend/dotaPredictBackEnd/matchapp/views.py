@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view, permission_classes
 from django.utils.timezone import now
 
 from .models import Match
-from .service import fetch_steam_live_league_games, get_parsed_live_matches
+from .service import fetch_steam_live_league_games, get_parsed_live_matches, transformMatchData
 
 @api_view(['GET'])
 #@permission_classes([IsAuthenticated])
@@ -87,16 +87,17 @@ def saveLiveMatches(request):
 def getMatches(request):
     try:
         matches = Match.objects.all().values()
-        return JsonResponse(list(matches), safe=False)
+        transformed_matches = [transformMatchData(match) for match in matches]
+        return JsonResponse(transformed_matches, safe=False)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
-@api_view(['GET'])
 def getTodayMatches(request):
     try:
         today = now().date()
         matches = Match.objects.filter(createdAt__date=today).values()
-        return JsonResponse(list(matches), safe=False)
+        transformed_matches = [transformMatchData(match) for match in matches]
+        return JsonResponse(transformed_matches, safe=False)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
@@ -106,14 +107,14 @@ def getMatch(request, id):
         match = Match.objects.filter(match_id=id).values().first()
         if not match:
             return JsonResponse({'error': f'Match with id {id} not found'}, status=404)
-        return JsonResponse(match, safe=False)
+        return JsonResponse(transformMatchData(match), safe=False)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
-@api_view(['GET'])
 def getInDraftMatches(request):
     try:
         matches = Match.objects.filter(draft_in_progress=True).values()
-        return JsonResponse(list(matches), safe=False)
+        transformed_matches = [transformMatchData(match) for match in matches]
+        return JsonResponse(transformed_matches, safe=False)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)

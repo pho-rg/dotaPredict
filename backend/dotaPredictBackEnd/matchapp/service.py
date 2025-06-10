@@ -82,3 +82,51 @@ def is_draft_in_progress(lastpick):
         return True
     else:
         return False
+    
+def transformMatchData(matchData):
+    return {
+        "match_id": matchData["match_id"],
+        "createdAt": matchData["createdAt"],
+        "radiant_team": matchData["radiant_team"],
+        "dire_team": matchData["dire_team"],
+        "draft_in_progress": matchData["draft_in_progress"],
+        "radiant_win_chance": matchData["radiant_win_chance"],
+        
+        # regroup picks in arrays
+        "radiant_picks": [
+            matchData["radiant_pick1"],
+            matchData["radiant_pick2"],
+            matchData["radiant_pick3"],
+            matchData["radiant_pick4"],
+            matchData["radiant_pick5"]
+        ],
+        
+        "dire_picks": [
+            matchData["dire_pick1"],
+            matchData["dire_pick2"],
+            matchData["dire_pick3"],
+            matchData["dire_pick4"],
+            matchData["dire_pick5"]
+        ],
+
+        # regroup bans in arrays
+        "radiant_bans": [
+            matchData["radiant_ban1"],
+            matchData["radiant_ban2"],
+            matchData["radiant_ban3"],
+            matchData["radiant_ban4"],
+            matchData["radiant_ban5"],
+            matchData["radiant_ban6"],
+            matchData["radiant_ban7"]
+        ],
+        
+        "dire_bans": [
+            matchData["dire_ban1"],
+            matchData["dire_ban2"],
+            matchData["dire_ban3"],
+            matchData["dire_ban4"],
+            matchData["dire_ban5"],
+            matchData["dire_ban6"],
+            matchData["dire_ban7"]
+        ]
+    }
