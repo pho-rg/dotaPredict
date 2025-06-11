@@ -3,9 +3,9 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, classification_report
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
+from tensorflow.keras.layers import Dense , Dropout
 
-import xgboost as xgb
+
 
 def openJson(path):
     with open (path) as json_file:
@@ -56,15 +56,15 @@ def main():
     X_train , X_test, y_train, y_test = train_test_split(X, y, test_size=0.2,random_state=42)
 
     model = Sequential()
-    model.add(Dense(32,input_dim=X_train.shape[1],activation='relu'))
-    model.add(Dense(32,activation='relu'))
-    model.add(Dense(32, activation='relu'))
-    model.add(Dense(32, activation='relu'))
-    model.add(Dense(1,activation='sigmoid'))
+    model.add(Dense(256, activation='relu', input_shape=(292,)))
+    model.add(Dropout(0.3))  # régularisation
+    model.add(Dense(128, activation='relu'))
+    model.add(Dropout(0.2))
+    model.add(Dense(1, activation='sigmoid'))
 
     model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
-    model.fit(X_train, y_train, epochs=1, batch_size=8, verbose=1)
+    model.fit(X_train, y_train, epochs=20, batch_size=8, verbose=1)
     model.save("dota_ann.h5")
 
     y_pred_proba = model.predict(X_test)
