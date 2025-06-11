@@ -45,7 +45,7 @@ export default {
       /**
        * id > 0 -> hero
        * id = -1 -> next hero to be chosen (real-time match)
-       * id = -2 -> hero to chose (analysis mode)
+       * id = -2 -> hero to chose (simulation mode)
        */
       type: Number, 
       default: null
@@ -66,7 +66,7 @@ export default {
   },
   computed: {
     hero() {
-      return heroes.find(h => h.id === this.id)
+      return heroes[this.id]
     },
     heroName() {
       return this.hero ? this.hero.localized_name : null
@@ -110,7 +110,7 @@ export default {
   },
   methods: {
     handleClick() {
-      if (this.onClick) this.onClick(this.id)
+      if (this.onClick) this.onClick()
     }
   }
 }

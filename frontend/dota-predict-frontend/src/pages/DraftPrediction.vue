@@ -1,9 +1,9 @@
 <template>
   <div class="draft-prediction-container">
     <div class="content-grow">
-      <HeaderBar v-if="isTallEnough"/>
+      <HeaderBar v-if="isTallEnough && !twitchFullscreen"/>
 
-      <div class="menu-btn" v-if="isTallEnough">
+      <div class="menu-btn" v-if="isTallEnough && !twitchFullscreen">
         <v-btn color="#912728" flat @click="handleMenu">
           <div class="menu-btn-content">
             <v-icon icon="mdi-keyboard-return" size="24"/>
@@ -35,7 +35,16 @@
             flat
             @click="closeTwitchStream"
           >
-            <v-icon icon="mdi-close" size="24" class="play-icon" />
+            <v-icon icon="mdi-close" size="24" class="btn-icon" />
+          </v-btn>
+
+          <v-btn
+            class="fullscreen-btn"
+            color="#912728"
+            flat
+            @click="handleStreamFullscreen"
+          >
+            <v-icon :icon="twitchFullscreen === true ? 'mdi-fullscreen-exit' : 'mdi-fullscreen'" size="24" class="fullscreen-icon" />
           </v-btn>
 
           <iframe
@@ -131,6 +140,7 @@ onUnmounted(() => {
 
 const twitchUrl = ref('')
 const iframeSrc = ref('')
+const twitchFullscreen = ref(false)
 
 const loadTwitchStream = () => {
   const match = twitchUrl.value.match(/twitch\.tv\/([^/?]+)/)
@@ -144,6 +154,11 @@ const loadTwitchStream = () => {
 
 const closeTwitchStream = () => {
   iframeSrc.value = '';
+  twitchFullscreen.value = false;
+}
+
+const handleStreamFullscreen = () => {
+  twitchFullscreen.value = !twitchFullscreen.value;
 }
 
 </script>
@@ -250,7 +265,7 @@ input::placeholder {
   padding: 5px;
 }
 
-.play-icon {
+.btn-icon {
   width: 20px;
   height: 20px;
 }
@@ -260,10 +275,9 @@ input::placeholder {
   height: 100%;
   border: 2px solid #912728
 }
-.close-btn {
+.close-btn, .fullscreen-btn {
   position: absolute;
-  top: -15px;
-  right: -15px;
+  right: -18px;
   z-index: 2;
   min-width: 40px;
   height: 40px;
@@ -273,5 +287,13 @@ input::placeholder {
   align-items: center;
   justify-content: center;
   padding: 5px;
+}
+
+.close-btn {
+  top: -15px;
+}
+
+.fullscreen-btn {
+  top: 35px;
 }
 </style>

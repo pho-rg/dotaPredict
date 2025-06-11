@@ -48,7 +48,7 @@
 
   const gotoSimulation = () => {
     // TODO create simulation page
-    router.push('/draftPrediction/')
+    router.push('/draftSimulation')
   }
 
   onMounted(fetchMatches)
