@@ -93,9 +93,9 @@ const isTallEnough = ref(window.innerHeight >= 500)
 let intervalId = null
 
 const draftBarData = ref({
-    radiantPicks: [0,0,0,0,0],
+    radiantPicks: [-1,-1,-1,-1,-1],
     radiantBans: [0,0,0,0,0,0,0],
-    direPicks: [0,0,0,0,0],
+    direPicks: [-1,-1,-1,-1,-1],
     direBans: [0,0,0,0,0,0,0],
     radiantWinChance: 50,
     radiantTeam: "",
