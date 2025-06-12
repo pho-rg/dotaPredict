@@ -12,6 +12,8 @@
         </v-btn>
       </div>
 
+      <span class="title"><v-icon icon="mdi-information-outline" size="38"/>Add / Edit heroes in the draft to update the AI prediction</span>
+
       <div v-if="heroSelection" class="hero-selection-overlay">
         <HeroSelection
           :selectHero="(id) => selectHero(id)"
@@ -63,20 +65,17 @@ const showHeroSelection = (team, position) => {
   
 }
 
-const closeHeroSelection = () => {
-
-  if (heroSelection.value === true) {
-    heroSelection.value = false;
-    selectedSlot.value = {team: 0, position: 0};
-  }
-
-}
-
-const selectHero = (id) => {
+const selectHero = async (id) => {
   const teams = {0: draftBarData.value.radiantPicks, 1: draftBarData.value.direPicks};
   teams[selectedSlot.value.team][selectedSlot.value.position] = id;
   heroSelection.value = false;
   selectedSlot.value = {team: 0, position: 0};
+  await updatePrediction(teams[0], teams[1]);
+}
+
+const updatePrediction = async (radiantPicks, direPicks) => {
+  // call api to predict with ai model
+  draftBarData.value.radiantWinChance = Math.floor(Math.random() * 100) + 1; // TEMPORARY
 }
 
 const draftBarData = ref({
@@ -162,5 +161,16 @@ onUnmounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.title{
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Mohave', sans-serif;
+  font-size: 28px;
+  text-align: center;
+  gap: 20px;
 }
 </style>

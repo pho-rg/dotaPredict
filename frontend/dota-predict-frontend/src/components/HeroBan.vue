@@ -35,6 +35,15 @@ export default {
 </script>
 
 <style scoped>
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .ban-frame {
   width: calc(100% / 7 - 32px); /* 7 par ligne avec 6px de gap */
   max-height: 40px;
@@ -42,6 +51,7 @@ export default {
   background: #222;
   position: relative;
   overflow: hidden;
+  animation: fadeIn 0.4s ease-out forwards;
 }
 
 .ban-image {
@@ -75,6 +85,7 @@ export default {
   transform: rotate(-27.5deg);
   transform-origin: left bottom;
   z-index: 3;
+  animation: fadeIn 0.4s ease-out forwards;
 }
 
 .ban-placeholder {

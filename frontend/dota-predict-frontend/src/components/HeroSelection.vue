@@ -6,7 +6,9 @@
             </v-btn>
         </div>
         <div class="scrollable-content">
-          <span class="modal-title">SELECT A HERO</span>
+          <span class="modal-title">
+            SELECT A HERO<span v-if="hoveredHeroName"> > <span class="text-red">{{ hoveredHeroName.toUpperCase() }}</span></span>
+          </span>
           <div class="hero-grid">
             <div
               v-for="(heroes, attr) in heroesByAttr"
@@ -30,6 +32,8 @@
                   :alt="hero.localized_name"
                   class="hero-img"
                   @click="props.selectHero(hero.id)"
+                  @mouseover="hoveredHeroName = hero.localized_name"
+                  @mouseleave="hoveredHeroName = ''"
                 />
               </div>
             </div>
@@ -46,6 +50,8 @@ const props = defineProps({
   selectHero: Function,
   close: Function
 })
+
+const hoveredHeroName = ref("");
 
 // Grouper les héros par type
 const heroesByAttr = {
@@ -230,5 +236,9 @@ onUnmounted(() => {
 
 .hero-img:hover {
   transform: scale(1.7);
+}
+
+.text-red{
+  color: "#912728";
 }
 </style>

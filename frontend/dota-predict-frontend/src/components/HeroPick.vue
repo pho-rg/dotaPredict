@@ -170,6 +170,19 @@ export default {
 
 .foreground {
   z-index: 2;
+  opacity: 0;
+  animation: fadeIn 0.2s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .hero-name-vertical {
