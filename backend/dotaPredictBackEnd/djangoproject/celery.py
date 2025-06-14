@@ -13,7 +13,7 @@ app.autodiscover_tasks([])
 app.conf.beat_schedule = {
     'matchAppScheduledTask-every-5-seconds': {
         'task': 'matchapp.tasks.matchAppScheduledTask',
-        'schedule': timedelta(minutes=1),
+        'schedule': timedelta(seconds=5),
     },
 }
 
