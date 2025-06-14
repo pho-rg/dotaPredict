@@ -34,7 +34,7 @@ def parse_match(match_data):
     radiant_bans = extract_bans(radiant.get("bans", []))
     dire_bans = extract_bans(dire.get("bans", []))
     # Based on the captain mode where the last pick is the fifth for dire team
-    draft_in_progress= is_draft_in_progress(dire_picks[4])
+    draft_in_progress= is_draft_in_progress(dire_picks[4], radiant_picks[4])
 
     return {
         "match_id": match_data["match_id"],
@@ -77,8 +77,8 @@ def extract_picks(picks):
 def extract_bans(bans):
     return [b.get("hero_id", 0) for b in bans] + [0] * (7 - len(bans))
 
-def is_draft_in_progress(lastpick):
-    if (lastpick == 0):
+def is_draft_in_progress(direLastPick, radiantLastPick):
+    if (radiantLastPick == 0 or direLastPick == 0):
         return True
     else:
         return False
