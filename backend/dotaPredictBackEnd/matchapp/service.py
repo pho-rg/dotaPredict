@@ -21,26 +21,51 @@ def get_parsed_live_matches():
 
 # Clean one match from Steam API object to a Match model
 def parse_match(match_data):
-    try:
-        scoreboard = match_data["scoreboard"]
-    except KeyError:
+    scoreboard = match_data.get("scoreboard")
+    if not scoreboard:
         return None  # Skip matches without scoreboard
 
     radiant = scoreboard.get("radiant", {})
     dire = scoreboard.get("dire", {})
 
-    radiant_picks = extract_picks(radiant.get("picks", []))
-    dire_picks = extract_picks(dire.get("picks", []))
-    radiant_bans = extract_bans(radiant.get("bans", []))
-    dire_bans = extract_bans(dire.get("bans", []))
-    # Based on the captain mode where the last pick is the fifth for dire team
+    # handle array of dictionnary
+    radiant_picks_raw = radiant.get("picks", [])
+    dire_picks_raw = dire.get("picks", [])
+    radiant_bans_raw = radiant.get("bans", [])
+    dire_bans_raw = dire.get("bans", [])
+
+    # make the array of dictionnary an array of integer
+    radiant_picks = extract_picks(radiant_picks_raw)
+    dire_picks = extract_picks(dire_picks_raw)
+    radiant_bans = extract_bans(radiant_bans_raw)
+    dire_bans = extract_bans(dire_bans_raw)
+
+    match_status = define_match_status(radiant_picks_raw, radiant_bans_raw, dire_picks_raw, dire_bans_raw)
     draft_in_progress= is_draft_in_progress(dire_picks[4], radiant_picks[4])
+
+    pro_match = True
+
+    radiant_team_raw = match_data.get("radiant_team")
+    if not radiant_team_raw:
+        pro_match = False
+        radiant_team = extract_player_name(match_data, 0)
+    else:
+        radiant_team = extract_team_name(radiant_team_raw)
+
+    dire_team_raw = match_data.get("dire_team")
+    if not dire_team_raw:
+        pro_match = False
+        dire_team = extract_player_name(match_data, 1)
+    else:
+        dire_team = extract_team_name(dire_team_raw)
 
     return {
         "match_id": match_data["match_id"],
-        "radiant_team": extract_team_name(match_data.get("radiant_team", {})),
-        "dire_team": extract_team_name(match_data.get("dire_team", {})),
+        "radiant_team": radiant_team,
+        "dire_team": dire_team,
         "draft_in_progress": draft_in_progress,
+        "match_status": match_status,
+        "pro_match": pro_match,
         "radiant_win_chance": 0,
         "radiant_pick1": radiant_picks[0],
         "radiant_pick2": radiant_picks[1],
@@ -71,10 +96,21 @@ def parse_match(match_data):
 def extract_team_name(team_data):
     return team_data.get("team_name", "Unknown")
 
+def extract_player_name(match_data, team_id):
+    players = match_data.get("players", [])
+
+    for player in players:
+        # id 0 = radiant, id 1 = dire
+        if player.get("team") == team_id:
+            return player.get("name", "Unknown")
+    return "Unknown"
+
 def extract_picks(picks):
+    # for missing pick, set the id to 0
     return [p.get("hero_id", 0) for p in picks] + [0] * (5 - len(picks))
 
 def extract_bans(bans):
+    # for missing ban, set the id to 0
     return [b.get("hero_id", 0) for b in bans] + [0] * (7 - len(bans))
 
 def is_draft_in_progress(direLastPick, radiantLastPick):
@@ -82,6 +118,15 @@ def is_draft_in_progress(direLastPick, radiantLastPick):
         return True
     else:
         return False
+
+def define_match_status(radiant_picks, radiant_bans, dire_picks, dire_bans):
+    if len(radiant_picks) == 0 and len(dire_picks) == 0 and len(radiant_bans) == 0 and len(dire_bans) == 0:
+        return "draft_to_start"
+    elif len(radiant_picks) == 5 and len(dire_picks) == 5 and len(radiant_bans) == 7 and len(dire_bans) == 7:
+        return "draft_finished"
+    else:
+        return "draft_in_progress"
+
     
 def transformMatchData(matchData):
     return {
@@ -90,6 +135,8 @@ def transformMatchData(matchData):
         "radiant_team": matchData["radiant_team"],
         "dire_team": matchData["dire_team"],
         "draft_in_progress": matchData["draft_in_progress"],
+        "match_status": matchData["match_status"],
+        "pro_match": matchData["pro_match"],
         "radiant_win_chance": matchData["radiant_win_chance"],
         
         # regroup picks in arrays

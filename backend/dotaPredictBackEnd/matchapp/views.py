@@ -1,7 +1,6 @@
 from django.http import JsonResponse
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
-from django.utils.timezone import now
 
 from .models import Match
 from .service import fetch_steam_live_league_games, get_parsed_live_matches, transformMatchData
@@ -26,6 +25,8 @@ def getParsedLiveMatches(request):
 @api_view(['POST'])
 def saveLiveMatches(request):
     try:
+        # consider all matchs ended before update
+        Match.objects.update(match_status="match_ended")
         # reset draft in progress field
         Match.objects.update(draft_in_progress=False)
 
@@ -39,6 +40,8 @@ def saveLiveMatches(request):
                     "radiant_team": match_data["radiant_team"],
                     "dire_team": match_data["dire_team"],
                     "draft_in_progress": match_data["draft_in_progress"],
+                    "match_status": match_data["match_status"],
+                    "pro_match": match_data["pro_match"],
                     "radiant_win_chance": match_data["radiant_win_chance"],
 
                     "radiant_pick1": match_data["radiant_pick1"],
@@ -92,10 +95,9 @@ def getMatches(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
-def getTodayMatches(request):
+def getAllLiveMatches(request):
     try:
-        today = now().date()
-        matches = Match.objects.filter(createdAt__date=today).values()
+        matches = Match.objects.exclude(match_status="match_ended").values()
         transformed_matches = [transformMatchData(match) for match in matches]
         return JsonResponse(transformed_matches, safe=False)
     except Exception as e:
