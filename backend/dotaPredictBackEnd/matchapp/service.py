@@ -1,6 +1,7 @@
 import requests
 
 from django.conf import settings
+from .models import Match
 
 # Retrieve raw data from Steam API
 def fetch_steam_live_league_games():
@@ -18,6 +19,75 @@ def get_parsed_live_matches():
     matches = raw_data.get("result", {}).get("games", [])
     parsed_matches = [parse_match(m) for m in matches]
     return [m for m in parsed_matches if m is not None]
+
+# Update match table
+def updateLiveMatches():
+    try:
+        # consider all matchs ended before update
+        Match.objects.update(match_status="match_ended")
+        # reset draft in progress field
+        Match.objects.update(draft_in_progress=False)
+
+        parsed_matches = get_parsed_live_matches()
+        created_count = 0
+        updated_count = 0
+
+        for match_data in parsed_matches:
+            obj, created = Match.objects.update_or_create(
+                match_id=match_data["match_id"],
+                defaults={
+                    "radiant_team": match_data["radiant_team"],
+                    "dire_team": match_data["dire_team"],
+                    "draft_in_progress": match_data["draft_in_progress"],
+                    "match_status": match_data["match_status"],
+                    "pro_match": match_data["pro_match"],
+                    "radiant_win_chance": match_data["radiant_win_chance"],
+
+                    "radiant_pick1": match_data["radiant_pick1"],
+                    "radiant_pick2": match_data["radiant_pick2"],
+                    "radiant_pick3": match_data["radiant_pick3"],
+                    "radiant_pick4": match_data["radiant_pick4"],
+                    "radiant_pick5": match_data["radiant_pick5"],
+
+                    "dire_pick1": match_data["dire_pick1"],
+                    "dire_pick2": match_data["dire_pick2"],
+                    "dire_pick3": match_data["dire_pick3"],
+                    "dire_pick4": match_data["dire_pick4"],
+                    "dire_pick5": match_data["dire_pick5"],
+
+                    "radiant_ban1": match_data["radiant_ban1"],
+                    "radiant_ban2": match_data["radiant_ban2"],
+                    "radiant_ban3": match_data["radiant_ban3"],
+                    "radiant_ban4": match_data["radiant_ban4"],
+                    "radiant_ban5": match_data["radiant_ban5"],
+                    "radiant_ban6": match_data["radiant_ban6"],
+                    "radiant_ban7": match_data["radiant_ban7"],
+
+                    "dire_ban1": match_data["dire_ban1"],
+                    "dire_ban2": match_data["dire_ban2"],
+                    "dire_ban3": match_data["dire_ban3"],
+                    "dire_ban4": match_data["dire_ban4"],
+                    "dire_ban5": match_data["dire_ban5"],
+                    "dire_ban6": match_data["dire_ban6"],
+                    "dire_ban7": match_data["dire_ban7"],
+                }
+            )
+            if created:
+                created_count += 1
+            else:
+                updated_count += 1
+
+        return {
+            "success": True,
+            "created": created_count,
+            "updated": updated_count,
+            "total": len(parsed_matches)
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e)
+        }
 
 # Clean one match from Steam API object to a Match model
 def parse_match(match_data):
