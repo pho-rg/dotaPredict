@@ -10,7 +10,7 @@
 </template>
 <script setup>
   import HeaderBar from '../components/HeaderBar.vue'
-  import Menu from '../components/menuComponent/Menu.vue'
+  import Menu from '../components/Menu.vue'
 </script>
 <style>
 .menu-container {
