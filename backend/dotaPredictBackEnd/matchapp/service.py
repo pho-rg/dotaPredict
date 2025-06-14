@@ -122,7 +122,7 @@ def is_draft_in_progress(direLastPick, radiantLastPick):
 def define_match_status(radiant_picks, radiant_bans, dire_picks, dire_bans):
     if len(radiant_picks) == 0 and len(dire_picks) == 0 and len(radiant_bans) == 0 and len(dire_bans) == 0:
         return "draft_to_start"
-    elif len(radiant_picks) == 5 and len(dire_picks) == 5 and len(radiant_bans) == 7 and len(dire_bans) == 7:
+    elif len(radiant_picks) == 5 and len(dire_picks) == 5:
         return "draft_finished"
     else:
         return "draft_in_progress"
