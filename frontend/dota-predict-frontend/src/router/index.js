@@ -11,6 +11,7 @@ import Login from '../pages/Login.vue'
 import Register from '../pages/Register.vue'
 import Menu from "../pages/Menu.vue"
 import DraftPrediction from "../pages/DraftPrediction.vue"
+import DraftSimulation from '@/pages/DraftSimulation.vue'
 
 
 const routes = [
@@ -30,6 +31,14 @@ const routes = [
   {
     path: `/draftPrediction/:matchId`,
     component: DraftPrediction,
+    beforeEnter: (to, from, next) => {
+      if (isAuthenticated()) next()
+      else next('/login')
+    },
+  },
+  {
+    path: `/draftSimulation`,
+    component: DraftSimulation,
     beforeEnter: (to, from, next) => {
       if (isAuthenticated()) next()
       else next('/login')

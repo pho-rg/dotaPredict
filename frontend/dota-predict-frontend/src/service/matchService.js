@@ -14,6 +14,16 @@ export const getAllLiveMatches = async () => {
   }
 }
 
+export const getOneMatch = async (matchId) => {
+  try {
+    const response = await axios.get(MATCH_URL + 'getOne/' + matchId)
+    return response.data
+  } catch (error) {
+    console.error('Failed to retrieve live matches', error)
+    throw error
+  }
+}
+
 // trigger POST API route to update table with live matches
 export const retrieveLiveMatches = async () => {
   try {

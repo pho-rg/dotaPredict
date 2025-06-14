@@ -2,11 +2,11 @@
   <v-container fluid class="draftbar-container">
     <v-row justify="space-between">
       <v-col cols="5">
-        <div class="d-flex flex-wrap" style="gap: 6px;">
+        <div class="d-flex flex-wrap" style="gap: 6px;" v-if="noBans===false">
           <HeroBan v-for="(id, i) in radiantBans" :key="'rb'+i" :id="id" />
         </div>
         <div class="d-flex flex-wrap mt-2" style="gap: 8px;">
-          <HeroPick v-for="(id, i) in radiantPicks" :key="'rp'+i" :id="id" :onClick="()=>pickOnClick(id)" />
+          <HeroPick v-for="(id, i) in radiantPicks" :key="'rp'+i" :id="id" :onClick="()=>pickOnClick(0, i)" />
         </div>
         
       </v-col>
@@ -19,11 +19,11 @@
       </v-col>
 
       <v-col cols="5">
-        <div class="d-flex flex-wrap justify-end" style="gap: 6px;">
+        <div class="d-flex flex-wrap justify-end" style="gap: 6px;" v-if="noBans===false">
           <HeroBan v-for="(id, i) in [...this.direBans].reverse()" :key="'db' + (direBans.length - 1 - i)" :id="id" />
         </div>
         <div class="d-flex flex-wrap justify-end mt-2" style="gap: 8px;">
-          <HeroPick v-for="(id, i) in [...this.direPicks].reverse()" :key="'dp' + (direPicks.length - 1 - i)" :id="id" :onClick="()=>pickOnClick(id)" />
+          <HeroPick v-for="(id, i) in [...this.direPicks].reverse()" :key="'dp' + (direPicks.length - 1 - i)" :id="id" :onClick="()=>pickOnClick(1, direPicks.length - 1 - i)" />
         </div>
         
       </v-col>
@@ -81,7 +81,9 @@ export default {
     direBans: Array,
     radiantWinChance: Number,
     radiantTeam: String,
-    direTeam: String
+    direTeam: String,
+    noBans: Boolean,
+    onClick: Function
   },
   data() {
     return {
@@ -113,14 +115,8 @@ export default {
       this.vsTitleSize = Math.min(Math.max(this.containerWidth * 0.06, 10), 90); // 10px - 90px
       this.predictionTitleSize = Math.min(Math.max(this.containerWidth * 0.015, 10), 25); // 10px - 25px
     },
-    pickOnClick(id) {
-      if (id > 0) {
-        console.log("hero :", id);
-      } else if (id === -1) {
-        console.log("waiting for the player's pick...");
-      } else if (id === -2) {
-        console.log("waiting for analyst input");
-      }
+    pickOnClick(team, position) {
+      if (this.onClick) this.onClick(team, position);
     }
   }
 }
