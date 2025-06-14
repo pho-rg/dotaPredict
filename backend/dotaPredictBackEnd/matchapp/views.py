@@ -95,6 +95,7 @@ def getMatches(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
+@api_view(['GET'])
 def getAllLiveMatches(request):
     try:
         matches = Match.objects.exclude(match_status="match_ended").values()
@@ -113,6 +114,7 @@ def getMatch(request, id):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
+@api_view(['GET'])
 def getInDraftMatches(request):
     try:
         matches = Match.objects.filter(draft_in_progress=True).values()
