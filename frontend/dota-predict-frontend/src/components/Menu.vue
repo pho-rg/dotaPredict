@@ -29,12 +29,11 @@
   </v-container>
 </template>
 <script setup>
-  import { computed, onMounted, onUnmounted, ref } from 'vue'
+  import { computed, onMounted, ref } from 'vue'
   import router from '../router/index.js'
   import { getAllLiveMatches } from '../service/matchService.js'
 
   const matches = ref([])
-  let intervalId = null
 
   const matchStatusLabel = {
     draft_to_start: 'Draft to start',
@@ -77,14 +76,7 @@
     router.push('/draftSimulation')
   }
 
-  onMounted(() => {
-    fetchMatches()
-    intervalId = setInterval(fetchMatches, 5000) // 5 seconds
-  })
-
-  onUnmounted(() => {
-    if (intervalId) clearInterval(intervalId) // clear on destroy
-  })
+  onMounted(fetchMatches)
 </script>
 <style scoped>
   .menu-component-container {

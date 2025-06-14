@@ -4,7 +4,11 @@
 
 > Dockerfile interpretation: make sure separator line for file `backend/dotaPredictBackEnd/django.sh` is set to LF (not CRLF)
 
-### Database container
+> Backend .env file filled based on .template `backend/dotaPredictBackEnd/.template` (ask for value)
+
+> Frontend .env file filled based on .template `frontend/dota-predict-frontend/.template` (ask for value)
+
+### Launch dotapredict API
 
 Folder
 ```
@@ -13,7 +17,7 @@ cd \backend\dotaPredictBackEnd\
 
 Start container
 ````
-docker compose up -d db
+docker compose up --build
 ````
 
 Stop container
@@ -25,23 +29,6 @@ Stop container deleting volume and datas
 ```
 docker compose down -v
 ```
-
-### Djangoapps container
-
-Folder
-```
-cd \backend\dotaPredictBackEnd\
-```
-
-Build project & start container
-```
-docker compose up dotapredict-api --build
-```
-
-Stop container
-````
-docker compose down
-````
 
 PORT
 > API reachable on http://localhost:8000/

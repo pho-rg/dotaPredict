@@ -11,7 +11,7 @@
           </div>
         </v-btn>
       </div>
-      
+
 
       <div class="twitch-embed" v-if="isTallEnough">
         <div v-if="!iframeSrc" class="livestream-integration">
@@ -110,12 +110,8 @@ const updateWindowSize = () => {
 const handleMenu = () => {
   router.push('/menu')
 }
-import { getAllLiveMatches } from '../service/matchService.js' // TEMPORAIRE
-const fetchMatchData = async () => {
-  // TEMPORAIRE, ACTUALISATION MANUELLE DES DONNEES BACKEND
-  // TODO REMOVE
-  const data = await getAllLiveMatches()
 
+const fetchMatchData = async () => {
   const matchId = route.params.matchId
   const matchData = await getOneMatch(matchId)
   draftBarData.value = generateDraftBarData(matchData)
@@ -129,8 +125,8 @@ const fetchMatchData = async () => {
 onMounted(async () => {
   window.addEventListener('resize', updateWindowSize)
   updateWindowSize ()
-  await fetchMatchData();
-  intervalId = setInterval(fetchMatchData, 2000) // update match data every 2s
+  await fetchMatchData()
+  intervalId = setInterval(fetchMatchData, 5000) // update match data every 5s
 })
 
 onUnmounted(() => {
@@ -204,11 +200,11 @@ const handleStreamFullscreen = () => {
 }
 
 .twitch-embed {
-  flex-grow: 1; 
+  flex-grow: 1;
   display: flex;
-  justify-content: center; 
-  align-items: center; 
-  padding-block: 20px;   
+  justify-content: center;
+  align-items: center;
+  padding-block: 20px;
 }
 
 .twitch-embed-title{
