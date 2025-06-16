@@ -126,7 +126,7 @@ onMounted(async () => {
   window.addEventListener('resize', updateWindowSize)
   updateWindowSize ()
   await fetchMatchData()
-  intervalId = setInterval(fetchMatchData, 5000) // update match data every 5s
+  intervalId = setInterval(fetchMatchData, 2000) // update match data every 2s
 })
 
 onUnmounted(() => {
