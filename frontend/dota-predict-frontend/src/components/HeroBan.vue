@@ -2,36 +2,36 @@
   <div class="ban-frame" @click="handleClick">
     <img
       v-if="id"
-      :src="imageSrc"
       alt="banned hero"
       class="ban-image"
-    />
-    <div class="ban-overlay" v-if="id"></div>
-    <div class="ban-line" v-if="id"></div>
+      :src="imageSrc"
+    >
+    <div v-if="id" class="ban-overlay" />
+    <div v-if="id" class="ban-line" />
     <div v-else class="ban-placeholder">?</div>
   </div>
 </template>
 
 <script>
-export default {
-  props: {
-    id: {
-      type: Number,
-      default: null
-    }
-  },
-  computed: {
-    imageSrc() {
-      if (!this.id) return null
-      return new URL(`/src/assets/heroes/bans/${this.id}.png`, import.meta.url).href
-    }
-  },
-  methods: {
-    handleClick() {
-      this.$emit('click', this.id)
-    }
+  export default {
+    props: {
+      id: {
+        type: Number,
+        default: null,
+      },
+    },
+    computed: {
+      imageSrc () {
+        if (!this.id) return null
+        return new URL(`/src/assets/heroes/bans/${this.id}.png`, import.meta.url).href
+      },
+    },
+    methods: {
+      handleClick () {
+        this.$emit('click', this.id)
+      },
+    },
   }
-}
 </script>
 
 <style scoped>
@@ -79,7 +79,7 @@ export default {
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 1000px; 
+  width: 1000px;
   height: 1px;
   background: red;
   transform: rotate(-27.5deg);

@@ -31,7 +31,7 @@
               :alt="hero.localized_name"
               class="hero-img"
               :class="{ 'grayscale': isHeroSelected(hero.id), 'disabled': isHeroSelected(hero.id) }"
-              :src="`/src/assets/heroes/bans/${hero.id}.png`"
+              :src="imageSrc(hero.id)"
               @click="!isHeroSelected(hero.id) && props.selectHero(hero.id)"
               @mouseleave="!isHeroSelected(hero.id) && (hoveredHeroName = '')"
               @mouseover="!isHeroSelected(hero.id) && (hoveredHeroName = hero.localized_name)"
@@ -44,7 +44,7 @@
 </template>
 
 <script setup>
-  import { onMounted, onUnmounted, ref } from 'vue'
+  import { computed, onMounted, onUnmounted, ref } from 'vue'
   import rawHeroes from '/src/utils/heroes.json'
 
   const props = defineProps({
@@ -66,6 +66,11 @@
   const heroes = Object.values(rawHeroes)
 
   const isHeroSelected = heroId => props.selectedHeroes.includes(heroId)
+
+  const imageSrc = id => {
+    if (!id) return null
+    return new URL(`/src/assets/heroes/bans/${id}.png`, import.meta.url).href
+  }
 
   for (const hero of heroes) {
     if (hero.primary_attr in heroesByAttr) {
