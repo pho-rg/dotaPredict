@@ -58,8 +58,8 @@ cd \frontend\dota-predict-frontend\
 
 Start server
 ```
-docker-compose build --no-cache
-docker compose up
+docker-compose up --build
+docker compose ups
 ```
 
 PORT
@@ -69,4 +69,4 @@ Make sure it's exposed to PORT 3000 to pass CORS API restriction (backend side)
 
 ### Register to login
 
-From a webbrowser, hit http://localhost:3000/login. Click on **create an account** to register. Once register you are redirected to login.
+From a webbrowser, hit http://localhost:3000/. Click on **create an account** to register. Once register you are redirected to login.
