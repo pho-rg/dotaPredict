@@ -58,7 +58,8 @@ cd \frontend\dota-predict-frontend\
 
 Start server
 ```
-npm run dev
+docker-compose build --no-cache
+docker compose up
 ```
 
 PORT

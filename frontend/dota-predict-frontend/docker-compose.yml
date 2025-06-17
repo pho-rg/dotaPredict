@@ -1,0 +1,8 @@
+services:
+  dotapredict-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:8080"
+    container_name: dotapredict-frontend
