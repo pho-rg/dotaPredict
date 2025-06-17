@@ -1,102 +1,106 @@
 <template>
-    <v-container class="hero-selection">
-        <div class="close-btn-container">
-            <v-btn icon color="#912728" @click="$emit('close')" class="close-btn">
-                <v-icon icon="mdi-close" />
-            </v-btn>
-        </div>
-        <div class="scrollable-content">
-          <span class="modal-title">
-            SELECT A HERO<span v-if="hoveredHeroName"> > <span class="text-red">{{ hoveredHeroName.toUpperCase() }}</span></span>
-          </span>
-          <div class="hero-grid">
-            <div
-              v-for="(heroes, attr) in heroesByAttr"
+  <v-container class="hero-selection">
+    <div class="close-btn-container">
+      <v-btn class="close-btn" color="#912728" icon @click="$emit('close')">
+        <v-icon icon="mdi-close" />
+      </v-btn>
+    </div>
+    <div class="scrollable-content">
+      <span class="modal-title">
+        SELECT A HERO<span v-if="hoveredHeroName"> > <span class="text-red">{{ hoveredHeroName.toUpperCase() }}</span></span>
+      </span>
+      <div class="hero-grid">
+        <div
+          v-for="(heroes, attr) in heroesByAttr"
+          :key="attr"
+          class="hero-column"
+        >
+          <div class="attr-label">
+            <img
               :key="attr"
-              class="hero-column"
+              :alt="attr"
+              class="attr-img"
+              :src="`/src/assets/attr/${attr}.png`"
             >
-              <div class="attr-label">
-                <img
-                  :key="attr"
-                  :src="`/src/assets/attr/${attr}.png`"
-                  :alt="attr"
-                  class="attr-img"
-                />
-                <span>{{ attrLabels[attr] }}</span>
-              </div>
-              <div class="hero-list">
-                <img
-                  v-for="hero in heroes"
-                  :key="hero.id"
-                  :src="`/src/assets/heroes/bans/${hero.id}.png`"
-                  :alt="hero.localized_name"
-                  class="hero-img"
-                  @click="props.selectHero(hero.id)"
-                  @mouseover="hoveredHeroName = hero.localized_name"
-                  @mouseleave="hoveredHeroName = ''"
-                />
-              </div>
-            </div>
+            <span>{{ attrLabels[attr] }}</span>
+          </div>
+          <div class="hero-list">
+            <img
+              v-for="hero in heroes"
+              :key="hero.id"
+              :alt="hero.localized_name"
+              class="hero-img"
+              :class="{ 'grayscale': isHeroSelected(hero.id), 'disabled': isHeroSelected(hero.id) }"
+              :src="`/src/assets/heroes/bans/${hero.id}.png`"
+              @click="!isHeroSelected(hero.id) && props.selectHero(hero.id)"
+              @mouseleave="!isHeroSelected(hero.id) && (hoveredHeroName = '')"
+              @mouseover="!isHeroSelected(hero.id) && (hoveredHeroName = hero.localized_name)"
+            >
           </div>
         </div>
-    </v-container>
+      </div>
+    </div>
+  </v-container>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
-import rawHeroes from '/src/utils/heroes.json'
+  import { onMounted, onUnmounted, ref } from 'vue'
+  import rawHeroes from '/src/utils/heroes.json'
 
-const props = defineProps({
-  selectHero: Function,
-  close: Function
-})
+  const props = defineProps({
+    selectHero: Function,
+    selectedHeroes: Array,
+    close: Function,
+  })
 
-const hoveredHeroName = ref("");
+  const hoveredHeroName = ref('')
 
-// Grouper les héros par type
-const heroesByAttr = {
-  str: [],
-  agi: [],
-  int: [],
-  all: []
-}
-
-const heroes = Object.values(rawHeroes)
-
-heroes.forEach(hero => {
-  if (hero.primary_attr in heroesByAttr) {
-    heroesByAttr[hero.primary_attr].push(hero)
+  // Grouper les héros par type
+  const heroesByAttr = {
+    str: [],
+    agi: [],
+    int: [],
+    all: [],
   }
-})
 
-// Tri par ordre alphabétique
-Object.keys(heroesByAttr).forEach(attr => {
-  heroesByAttr[attr].sort((a, b) => a.localized_name.localeCompare(b.localized_name))
-})
+  const heroes = Object.values(rawHeroes)
 
-const attrLabels = {
-  str: 'STRENGTH',
-  agi: 'AGILITY',
-  int: 'INTELLIGENCE',
-  all: 'UNIVERSAL'
-}
+  const isHeroSelected = heroId => props.selectedHeroes.includes(heroId)
 
-const isWideEnough = ref(window.innerWidth >= 1024);
-const isTallEnough = ref(window.innerHeight >= 500);
+  for (const hero of heroes) {
+    if (hero.primary_attr in heroesByAttr) {
+      heroesByAttr[hero.primary_attr].push(hero)
+    }
+  }
 
-const updateWindowSize = () => {
-  isWideEnough.value = window.innerWidth >= 1024
-  isTallEnough.value = window.innerHeight >= 500
-}
+  // Tri par ordre alphabétique
+  for (const attr of Object.keys(heroesByAttr)) {
+    heroesByAttr[attr].sort((a, b) => a.localized_name.localeCompare(b.localized_name))
+  }
 
-onMounted(async () => {
-  window.addEventListener('resize', updateWindowSize)
-  updateWindowSize ()
-})
+  const attrLabels = {
+    str: 'STRENGTH',
+    agi: 'AGILITY',
+    int: 'INTELLIGENCE',
+    all: 'UNIVERSAL',
+  }
 
-onUnmounted(() => {
-  window.removeEventListener('resize', updateWindowSize)
-})
+  const isWideEnough = ref(window.innerWidth >= 1024)
+  const isTallEnough = ref(window.innerHeight >= 500)
+
+  const updateWindowSize = () => {
+    isWideEnough.value = window.innerWidth >= 1024
+    isTallEnough.value = window.innerHeight >= 500
+  }
+
+  onMounted(async () => {
+    window.addEventListener('resize', updateWindowSize)
+    updateWindowSize ()
+  })
+
+  onUnmounted(() => {
+    window.removeEventListener('resize', updateWindowSize)
+  })
 
 </script>
 
@@ -119,7 +123,7 @@ onUnmounted(() => {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding-right: 8px; 
+  padding-right: 8px;
 }
 
 .close-btn-container {
@@ -225,7 +229,7 @@ onUnmounted(() => {
   cursor: pointer;
   border-radius: 4px;
   transition: transform 0.2s ease;
-  max-height: 100%; 
+  max-height: 100%;
 }
 
 .attr-img {
@@ -234,8 +238,21 @@ onUnmounted(() => {
   position: relative;
 }
 
+.grayscale {
+  filter: grayscale(100%);
+}
+
+.disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
 .hero-img:hover {
   transform: scale(1.7);
+}
+
+.hero-img.disabled:hover {
+  transform: none;
 }
 
 .text-red{

@@ -1,17 +1,17 @@
 <template>
-  <v-container fluid class="draftbar-container">
+  <v-container class="draftbar-container" fluid>
     <v-row justify="space-between">
       <v-col cols="5">
-        <div class="d-flex flex-wrap" style="gap: 6px;" v-if="noBans===false">
-          <HeroBan v-for="(id, i) in radiantBans" :key="'rb'+i" :id="id" />
+        <div v-if="noBans===false" class="d-flex flex-wrap" style="gap: 6px;">
+          <HeroBan v-for="(id, i) in radiantBans" :id="id" :key="'rb'+i" />
         </div>
         <div class="d-flex flex-wrap mt-2" style="gap: 8px;">
-          <HeroPick v-for="(id, i) in radiantPicks" :key="'rp'+i" :id="id" :onClick="()=>pickOnClick(0, i)" />
+          <HeroPick v-for="(id, i) in radiantPicks" :id="id" :key="'rp'+i" :on-click="()=>pickOnClick(0, i)" />
         </div>
-        
+
       </v-col>
 
-      <v-col cols="2" class="text-center d-flex flex-column justify-end">
+      <v-col class="text-center d-flex flex-column justify-end" cols="2">
         <div class="d-flex flex-column align-center">
           <div class="vs-title" :style="{ fontSize: vsTitleSize + 'px'}">VS</div>
           <div class="prediction-title" :style="{ fontSize: predictionTitleSize + 'px'}">WIN PREDICTION</div>
@@ -19,13 +19,13 @@
       </v-col>
 
       <v-col cols="5">
-        <div class="d-flex flex-wrap justify-end" style="gap: 6px;" v-if="noBans===false">
-          <HeroBan v-for="(id, i) in [...this.direBans].reverse()" :key="'db' + (direBans.length - 1 - i)" :id="id" />
+        <div v-if="noBans===false" class="d-flex flex-wrap justify-end" style="gap: 6px;">
+          <HeroBan v-for="(id, i) in [...direBans].reverse()" :id="id" :key="'db' + (direBans.length - 1 - i)" />
         </div>
         <div class="d-flex flex-wrap justify-end mt-2" style="gap: 8px;">
-          <HeroPick v-for="(id, i) in [...this.direPicks].reverse()" :key="'dp' + (direPicks.length - 1 - i)" :id="id" :onClick="()=>pickOnClick(1, direPicks.length - 1 - i)" />
+          <HeroPick v-for="(id, i) in [...direPicks].reverse()" :id="id" :key="'dp' + (direPicks.length - 1 - i)" :on-click="()=>pickOnClick(1, direPicks.length - 1 - i)" />
         </div>
-        
+
       </v-col>
     </v-row>
     <v-row>
@@ -54,7 +54,7 @@
             </span>
           </div>
           <div class="prediction-bar" :style="{ height: predictionBarHeight + 'px'}">
-            <div class="prediction-fill" :style="{ width: radiantWinChance + '%' }"></div>
+            <div class="prediction-fill" :style="{ width: radiantWinChance + '%' }" />
           </div>
         </div>
       </v-col>
@@ -69,57 +69,57 @@
 </template>
 
 <script>
-import HeroPick from './HeroPick.vue'
-import HeroBan from './HeroBan.vue'
+  import HeroBan from './HeroBan.vue'
+  import HeroPick from './HeroPick.vue'
 
-export default {
-  components: { HeroPick, HeroBan },
-  props: {
-    radiantPicks: Array,
-    direPicks: Array,
-    radiantBans: Array,
-    direBans: Array,
-    radiantWinChance: Number,
-    radiantTeam: String,
-    direTeam: String,
-    noBans: Boolean,
-    onClick: Function
-  },
-  data() {
-    return {
-      containerWidth: 0,
-      teamTitleSize: 30, // valeur par défaut
-      teamNameSize: 20,
-      predictionValueSize: 18,
-      predictionBarHeight: 6,
-      predictionTitleSize: 30,
-      vsTitleSize: 90
-    }
-  },
-  mounted() {
-    this.updateSizes();
-    window.addEventListener('resize', this.updateSizes);
-  },
-  beforeUnmount() {
-    window.removeEventListener('resize', this.updateSizes);
-  },
-  methods: {
-    updateSizes() {
-      this.containerWidth = this.$el.offsetWidth || window.innerWidth;
-
-      // fix dimensions proportions
-      this.teamTitleSize = Math.min(Math.max(this.containerWidth * 0.02, 12), 30); // 12px - 30px
-      this.teamNameSize = Math.min(Math.max(this.containerWidth * 0.01, 10), 20); // 10px - 20px
-      this.predictionValueSize = Math.min(Math.max(this.containerWidth * 0.01, 10), 18); // 10px - 18px
-      this.predictionBarHeight = Math.min(Math.max(this.containerWidth * 0.0045, 2), 6); // 2px - 6px
-      this.vsTitleSize = Math.min(Math.max(this.containerWidth * 0.06, 10), 90); // 10px - 90px
-      this.predictionTitleSize = Math.min(Math.max(this.containerWidth * 0.015, 10), 25); // 10px - 25px
+  export default {
+    components: { HeroPick, HeroBan },
+    props: {
+      radiantPicks: Array,
+      direPicks: Array,
+      radiantBans: Array,
+      direBans: Array,
+      radiantWinChance: Number,
+      radiantTeam: String,
+      direTeam: String,
+      noBans: Boolean,
+      onClick: Function,
     },
-    pickOnClick(team, position) {
-      if (this.onClick) this.onClick(team, position);
-    }
+    data () {
+      return {
+        containerWidth: 0,
+        teamTitleSize: 30, // valeur par défaut
+        teamNameSize: 20,
+        predictionValueSize: 18,
+        predictionBarHeight: 6,
+        predictionTitleSize: 30,
+        vsTitleSize: 90,
+      }
+    },
+    mounted () {
+      this.updateSizes()
+      window.addEventListener('resize', this.updateSizes)
+    },
+    beforeUnmount () {
+      window.removeEventListener('resize', this.updateSizes)
+    },
+    methods: {
+      updateSizes () {
+        this.containerWidth = this.$el.offsetWidth || window.innerWidth
+
+        // fix dimensions proportions
+        this.teamTitleSize = Math.min(Math.max(this.containerWidth * 0.02, 12), 30) // 12px - 30px
+        this.teamNameSize = Math.min(Math.max(this.containerWidth * 0.01, 10), 20) // 10px - 20px
+        this.predictionValueSize = Math.min(Math.max(this.containerWidth * 0.01, 10), 18) // 10px - 18px
+        this.predictionBarHeight = Math.min(Math.max(this.containerWidth * 0.0045, 2), 6) // 2px - 6px
+        this.vsTitleSize = Math.min(Math.max(this.containerWidth * 0.06, 10), 90) // 10px - 90px
+        this.predictionTitleSize = Math.min(Math.max(this.containerWidth * 0.015, 10), 25) // 10px - 25px
+      },
+      pickOnClick (team, position) {
+        if (this.onClick) this.onClick(team, position)
+      },
+    },
   }
-}
 </script>
 
 <style scoped>

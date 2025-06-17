@@ -2,8 +2,16 @@
   <v-container class="menu-component-container" fluid>
     <v-row align="center" class="component-title" justify="space-between">
       <span>Live matches</span>
-      <v-btn v-if="checkRole" align="end" color="#912728" @click="gotoSimulation()">
-        Simulate a draft
+      <v-btn
+        v-if="checkRole"
+        align="end"
+        color="#912728"
+        @click="gotoSimulation()"
+      >
+        <div class="nav-btn-content">
+          <v-icon icon="mdi-magnify-scan" size="22" />
+          <span>Simulate a draft</span>
+        </div>
       </v-btn>
     </v-row>
     <v-row v-for="match in matches" :key="match.match_id" class="match-row">
@@ -12,24 +20,27 @@
       </v-col>
 
       <v-col class="match-infos">
-        <span :class="getStatusDotClass(match.match_status)"></span>
+        <span :class="getStatusDotClass(match.match_status)" />
         {{ getStatusLabel(match.match_status) }}
       </v-col>
 
-      <v-col  class="match-infos">
-        <img v-if="match.pro_match" alt="Pro Match" class="pro-match-icon" src="/src/assets/trophy.png" />
+      <v-col class="match-infos">
+        <img v-if="match.pro_match" alt="Pro Match" class="pro-match-icon" src="/src/assets/trophy.png">
       </v-col>
 
-      <v-col align="end" class="match-action">
+      <v-col align="center">
         <v-btn color="#727272" @click="seeAnalysis(match.match_id)">
-          Go to analysis
+          <div class="nav-btn-content">
+            <span>Go to analysis</span>
+            <v-icon icon="mdi-chevron-right" size="24" />
+          </div>
         </v-btn>
       </v-col>
     </v-row>
   </v-container>
 </template>
 <script setup>
-import {computed, onMounted, onUnmounted, ref} from 'vue'
+  import { computed, onMounted, onUnmounted, ref } from 'vue'
   import router from '../router/index.js'
   import { getAllLiveMatches } from '../service/matchService.js'
 
@@ -99,6 +110,7 @@ import {computed, onMounted, onUnmounted, ref} from 'vue'
     margin-right: auto;
     max-width: 1000px;
     padding: 16px;
+    padding-bottom: 30px;
   }
 
   .component-title {
@@ -106,14 +118,27 @@ import {computed, onMounted, onUnmounted, ref} from 'vue'
     font-family: 'Mohave', sans-serif;
     font-weight: bold;
     margin: 10px;
+    padding-bottom: 15px;
+    padding-inline: 15px;
+    border-bottom: white solid 2px;
   }
 
-  .match-infos {
+  .match-infos{
     font-family: 'Mohave', sans-serif;
+  }
+
+  .nav-btn-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Mohave', sans-serif;
+    font-size: 16px;
   }
 
   .match-row {
     margin-left: 10px;
+    display: flex;
+    align-items: center;
   }
 
   .status-dot {

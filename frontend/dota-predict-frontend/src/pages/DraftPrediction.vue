@@ -1,29 +1,28 @@
 <template>
   <div class="draft-prediction-container">
     <div class="content-grow">
-      <HeaderBar v-if="isTallEnough && !twitchFullscreen"/>
+      <HeaderBar v-if="isTallEnough && !twitchFullscreen" />
 
-      <div class="menu-btn" v-if="isTallEnough && !twitchFullscreen">
+      <div v-if="isTallEnough && !twitchFullscreen" class="menu-btn">
         <v-btn color="#912728" flat @click="handleMenu">
           <div class="menu-btn-content">
-            <v-icon icon="mdi-keyboard-return" size="24"/>
+            <v-icon icon="mdi-keyboard-return" size="24" />
             <span>Return to menu</span>
           </div>
         </v-btn>
       </div>
 
-
-      <div class="twitch-embed" v-if="isTallEnough">
+      <div v-if="isTallEnough" class="twitch-embed">
         <div v-if="!iframeSrc" class="livestream-integration">
           <span class="twitch-embed-title">IMPORT TWITCH LIVESTREAM</span>
           <div class="livestream-inputs">
             <input
               v-model="twitchUrl"
-              type="text"
               placeholder="Enter the Twitch stream URL..."
-            />
+              type="text"
+            >
             <v-btn class="play-btn" color="#912728" flat @click="loadTwitchStream">
-              <v-icon icon="mdi-play" size="24" class="play-icon" />
+              <v-icon class="play-icon" icon="mdi-play" size="24" />
             </v-btn>
           </div>
         </div>
@@ -35,7 +34,7 @@
             flat
             @click="closeTwitchStream"
           >
-            <v-icon icon="mdi-close" size="24" class="btn-icon" />
+            <v-icon class="btn-icon" icon="mdi-close" size="24" />
           </v-btn>
 
           <v-btn
@@ -44,118 +43,116 @@
             flat
             @click="handleStreamFullscreen"
           >
-            <v-icon :icon="twitchFullscreen === true ? 'mdi-fullscreen-exit' : 'mdi-fullscreen'" size="24" class="fullscreen-icon" />
+            <v-icon class="fullscreen-icon" :icon="twitchFullscreen === true ? 'mdi-fullscreen-exit' : 'mdi-fullscreen'" size="24" />
           </v-btn>
 
           <iframe
-            :src="iframeSrc"
-            class="iframe"
             allowfullscreen
+            class="iframe"
             frameborder="0"
-          ></iframe>
+            :src="iframeSrc"
+          />
         </div>
       </div>
     </div>
 
     <div class="draftbar-container">
-        <DraftBar
-          v-if="isWideEnough"
-          :radiantPicks="draftBarData.radiantPicks"
-          :radiantBans="draftBarData.radiantBans"
-          :direPicks="draftBarData.direPicks"
-          :direBans="draftBarData.direBans"
-          :radiantWinChance="draftBarData.radiantWinChance"
-          :radiantTeam="draftBarData.radiantTeam"
-          :direTeam="draftBarData.direTeam"
-        />
-        <div v-else class="draftbar-warning">
-            <v-icon icon="mdi-monitor-screenshot" size="36" class="mr-4" />
-            <span>Please enlarge the window to view the draft.</span>
-        </div>
+      <DraftBar
+        v-if="isWideEnough"
+        :dire-bans="draftBarData.direBans"
+        :dire-picks="draftBarData.direPicks"
+        :dire-team="draftBarData.direTeam"
+        :radiant-bans="draftBarData.radiantBans"
+        :radiant-picks="draftBarData.radiantPicks"
+        :radiant-team="draftBarData.radiantTeam"
+        :radiant-win-chance="draftBarData.radiantWinChance"
+      />
+      <div v-else class="draftbar-warning">
+        <v-icon class="mr-4" icon="mdi-monitor-screenshot" size="36" />
+        <span>Please enlarge the window to view the draft.</span>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
-import { useRoute } from 'vue-router'
-import router from '../router/index.js'
-import DraftBar from '/src/components/DraftBar.vue'
-import HeaderBar from "@/components/HeaderBar.vue";
-import { getOneMatch } from '../service/matchService.js'
-import { generateDraftBarData } from '../utils/match.js'
+  import { onMounted, onUnmounted, ref } from 'vue'
+  import { useRoute } from 'vue-router'
+  import HeaderBar from '@/components/HeaderBar.vue'
+  import router from '../router/index.js'
+  import { getOneMatch } from '../service/matchService.js'
+  import { generateDraftBarData } from '../utils/match.js'
+  import DraftBar from '/src/components/DraftBar.vue'
 
-const route = useRoute()
+  const route = useRoute()
 
-const isWideEnough = ref(window.innerWidth >= 1024)
-const isTallEnough = ref(window.innerHeight >= 500)
+  const isWideEnough = ref(window.innerWidth >= 1024)
+  const isTallEnough = ref(window.innerHeight >= 500)
 
-let intervalId = null
+  let intervalId = null
 
-const draftBarData = ref({
-    radiantPicks: [-1,-1,-1,-1,-1],
-    radiantBans: [0,0,0,0,0,0,0],
-    direPicks: [-1,-1,-1,-1,-1],
-    direBans: [0,0,0,0,0,0,0],
+  const draftBarData = ref({
+    radiantPicks: [-1, -1, -1, -1, -1],
+    radiantBans: [0, 0, 0, 0, 0, 0, 0],
+    direPicks: [-1, -1, -1, -1, -1],
+    direBans: [0, 0, 0, 0, 0, 0, 0],
     radiantWinChance: 50,
-    radiantTeam: "",
-    direTeam: ""
-});
+    radiantTeam: '',
+    direTeam: '',
+  })
 
-const updateWindowSize = () => {
-  isWideEnough.value = window.innerWidth >= 1024
-  isTallEnough.value = window.innerHeight >= 500
-}
+  const updateWindowSize = () => {
+    isWideEnough.value = window.innerWidth >= 1024
+    isTallEnough.value = window.innerHeight >= 500
+  }
 
-const handleMenu = () => {
-  router.push('/menu')
-}
+  const handleMenu = () => {
+    router.push('/menu')
+  }
 
-const fetchMatchData = async () => {
-  const matchId = route.params.matchId
-  const matchData = await getOneMatch(matchId)
-  draftBarData.value = generateDraftBarData(matchData)
-  if (!matchData.draft_in_progress) {
-    if (intervalId) { // stop updating if draft is done
+  const fetchMatchData = async () => {
+    const matchId = route.params.matchId
+    const matchData = await getOneMatch(matchId)
+    draftBarData.value = generateDraftBarData(matchData)
+    if (!matchData.draft_in_progress && intervalId) { // stop updating if draft is done
       clearInterval(intervalId)
     }
   }
-}
 
-onMounted(async () => {
-  window.addEventListener('resize', updateWindowSize)
-  updateWindowSize ()
-  await fetchMatchData()
-  intervalId = setInterval(fetchMatchData, 2000) // update match data every 2s
-})
+  onMounted(async () => {
+    window.addEventListener('resize', updateWindowSize)
+    updateWindowSize ()
+    await fetchMatchData()
+    intervalId = setInterval(fetchMatchData, 2000) // update match data every 2s
+  })
 
-onUnmounted(() => {
-  window.removeEventListener('resize', updateWindowSize)
-  if (intervalId) clearInterval(intervalId)
-})
+  onUnmounted(() => {
+    window.removeEventListener('resize', updateWindowSize)
+    if (intervalId) clearInterval(intervalId)
+  })
 
-const twitchUrl = ref('')
-const iframeSrc = ref('')
-const twitchFullscreen = ref(false)
+  const twitchUrl = ref('')
+  const iframeSrc = ref('')
+  const twitchFullscreen = ref(false)
 
-const loadTwitchStream = () => {
-  const match = twitchUrl.value.match(/twitch\.tv\/([^/?]+)/)
-  if (match && match[1]) {
-    const channelName = match[1]
-    iframeSrc.value = `https://player.twitch.tv/?channel=${channelName}&parent=${window.location.hostname}`
-  } else {
-    alert("Invalid Twitch URL")
+  const loadTwitchStream = () => {
+    const match = twitchUrl.value.match(/twitch\.tv\/([^/?]+)/)
+    if (match && match[1]) {
+      const channelName = match[1]
+      iframeSrc.value = `https://player.twitch.tv/?channel=${channelName}&parent=${window.location.hostname}`
+    } else {
+      alert('Invalid Twitch URL')
+    }
   }
-}
 
-const closeTwitchStream = () => {
-  iframeSrc.value = '';
-  twitchFullscreen.value = false;
-}
+  const closeTwitchStream = () => {
+    iframeSrc.value = ''
+    twitchFullscreen.value = false
+  }
 
-const handleStreamFullscreen = () => {
-  twitchFullscreen.value = !twitchFullscreen.value;
-}
+  const handleStreamFullscreen = () => {
+    twitchFullscreen.value = !twitchFullscreen.value
+  }
 
 </script>
 

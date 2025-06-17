@@ -1,112 +1,138 @@
 <template>
   <div class="draft-prediction-container">
     <div class="content-grow">
-      <HeaderBar v-if="isTallEnough"/>
+      <HeaderBar v-if="isTallEnough" />
 
-      <div class="menu-btn" v-if="isTallEnough">
+      <div v-if="isTallEnough" class="menu-btn">
         <v-btn color="#912728" flat @click="handleMenu">
           <div class="menu-btn-content">
-            <v-icon icon="mdi-keyboard-return" size="24"/>
+            <v-icon icon="mdi-keyboard-return" size="24" />
             <span>Return to menu</span>
           </div>
         </v-btn>
       </div>
 
-      <span class="title"><v-icon icon="mdi-information-outline" size="38"/>Add / Edit heroes in the draft to update the AI prediction</span>
+      <span class="title"><v-icon icon="mdi-information-outline" size="38" />Add / Edit heroes in the draft to update the AI prediction</span>
 
       <div v-if="heroSelection" class="hero-selection-overlay">
         <HeroSelection
-          :selectHero="(id) => selectHero(id)"
+          :select-hero="(id) => selectHero(id)"
+          :selected-heroes="selectedHeroes"
           @close="heroSelection = false"
         />
       </div>
-       
+
+    </div>
+
+    <div class="reset-btns">
+      <v-btn color="#912728" flat @click="()=>resetTeamPicks(0)">
+        <div class="menu-btn-content">
+          <v-icon icon="mdi-sync" size="22" />
+          <span>Reset</span>
+        </div>
+      </v-btn>
+      <v-btn color="#912728" flat @click="()=>resetTeamPicks(1)">
+        <div class="menu-btn-content">
+          <v-icon icon="mdi-sync" size="22" />
+          <span>Reset</span>
+        </div>
+      </v-btn>
     </div>
 
     <div class="draftbar-container">
-        <DraftBar
-          v-if="isWideEnough"
-          :radiantPicks="draftBarData.radiantPicks"
-          :radiantBans="draftBarData.radiantBans"
-          :direPicks="draftBarData.direPicks"
-          :direBans="draftBarData.direBans"
-          :radiantWinChance="draftBarData.radiantWinChance"
-          :radiantTeam="draftBarData.radiantTeam"
-          :direTeam="draftBarData.direTeam"
-          :noBans="draftBarData.noBans"
-          :onClick="draftBarData.onClick"
-        />
-        <div v-else class="draftbar-warning">
-            <v-icon icon="mdi-monitor-screenshot" size="36" class="mr-4" />
-            <span>Please enlarge the window to view the draft.</span>
-        </div>
+      <DraftBar
+        v-if="isWideEnough"
+        :dire-bans="draftBarData.direBans"
+        :dire-picks="draftBarData.direPicks"
+        :dire-team="draftBarData.direTeam"
+        :no-bans="draftBarData.noBans"
+        :on-click="draftBarData.onClick"
+        :radiant-bans="draftBarData.radiantBans"
+        :radiant-picks="draftBarData.radiantPicks"
+        :radiant-team="draftBarData.radiantTeam"
+        :radiant-win-chance="draftBarData.radiantWinChance"
+      />
+      <div v-else class="draftbar-warning">
+        <v-icon class="mr-4" icon="mdi-monitor-screenshot" size="36" />
+        <span>Please enlarge the window to view the draft.</span>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
-import router from '../router/index.js';
-import DraftBar from '/src/components/DraftBar.vue';
-import HeaderBar from "@/components/HeaderBar.vue";
+  import { computed, onMounted, onUnmounted, ref } from 'vue'
+  import HeaderBar from '@/components/HeaderBar.vue'
+  import router from '../router/index.js'
+  import DraftBar from '/src/components/DraftBar.vue'
 
-const isWideEnough = ref(window.innerWidth >= 1024);
-const isTallEnough = ref(window.innerHeight >= 500);
+  const isWideEnough = ref(window.innerWidth >= 1024)
+  const isTallEnough = ref(window.innerHeight >= 500)
 
-const heroSelection = ref(false);
-const selectedSlot = ref({team: 0, position: 0})
+  const heroSelection = ref(false)
+  const selectedSlot = ref({ team: 0, position: 0 })
 
-const showHeroSelection = (team, position) => {
-  
-  if (heroSelection.value === false) {
-    heroSelection.value = true;
-    selectedSlot.value = {team: team, position: position};
+  const showHeroSelection = (team, position) => {
+    if (heroSelection.value === false) {
+      heroSelection.value = true
+      selectedSlot.value = { team: team, position: position }
+    }
   }
-  
-}
 
-const selectHero = async (id) => {
-  const teams = {0: draftBarData.value.radiantPicks, 1: draftBarData.value.direPicks};
-  teams[selectedSlot.value.team][selectedSlot.value.position] = id;
-  heroSelection.value = false;
-  selectedSlot.value = {team: 0, position: 0};
-  await updatePrediction(teams[0], teams[1]);
-}
+  const selectHero = async id => {
+    const teams = { 0: draftBarData.value.radiantPicks, 1: draftBarData.value.direPicks }
+    teams[selectedSlot.value.team][selectedSlot.value.position] = id
+    heroSelection.value = false
+    selectedSlot.value = { team: 0, position: 0 }
+    await updatePrediction(teams[0], teams[1])
+  }
 
-const updatePrediction = async (radiantPicks, direPicks) => {
-  // call api to predict with ai model
-  draftBarData.value.radiantWinChance = Math.floor(Math.random() * 100) + 1; // TEMPORARY
-}
+  const resetTeamPicks = async teamId => {
+    const teams = { 0: draftBarData.value.radiantPicks, 1: draftBarData.value.direPicks }
+    for (let i = 0; i < teams[teamId].length; i++) {
+      teams[teamId][i] = -2
+    }
+    await updatePrediction(teams[0], teams[1])
+  }
 
-const draftBarData = ref({
-    radiantPicks: [-2,-2,-2,-2,-2],
-    radiantBans: [0,0,0,0,0,0,0],
-    direPicks: [-2,-2,-2,-2,-2],
-    direBans: [0,0,0,0,0,0,0],
+  const updatePrediction = async (radiantPicks, direPicks) => {
+    // call api to predict with ai model
+    draftBarData.value.radiantWinChance = Math.floor(Math.random() * 100) + 1 // TEMPORARY
+  }
+
+  const draftBarData = ref({
+    radiantPicks: [-2, -2, -2, -2, -2],
+    radiantBans: [0, 0, 0, 0, 0, 0, 0],
+    direPicks: [-2, -2, -2, -2, -2],
+    direBans: [0, 0, 0, 0, 0, 0, 0],
     radiantWinChance: 50,
-    radiantTeam: "",
-    direTeam: "",
+    radiantTeam: '',
+    direTeam: '',
     noBans: true,
-    onClick: (team, position) => showHeroSelection(team, position)
-});
+    onClick: (team, position) => showHeroSelection(team, position),
+  })
 
-const updateWindowSize = () => {
-  isWideEnough.value = window.innerWidth >= 1024
-  isTallEnough.value = window.innerHeight >= 500
-}
+  const selectedHeroes = computed(() => {
+    return draftBarData.value.radiantPicks.concat(draftBarData.value.direPicks)
+  })
 
-const handleMenu = () => {
-  router.push('/menu')
-}
+  const updateWindowSize = () => {
+    isWideEnough.value = window.innerWidth >= 1024
+    isTallEnough.value = window.innerHeight >= 500
+  }
 
-onMounted(async () => {
-  window.addEventListener('resize', updateWindowSize)
-  updateWindowSize ()
-})
+  const handleMenu = () => {
+    router.push('/menu')
+  }
 
-onUnmounted(() => {
-  window.removeEventListener('resize', updateWindowSize)
-})
+  onMounted(async () => {
+    window.addEventListener('resize', updateWindowSize)
+    updateWindowSize ()
+  })
+
+  onUnmounted(() => {
+    window.removeEventListener('resize', updateWindowSize)
+  })
 
 </script>
 
@@ -157,7 +183,7 @@ onUnmounted(() => {
   width: 100vw;
   height: 100vh;
   z-index: 999;
-  background: rgba(0, 0, 0, 0.8); 
+  background: rgba(0, 0, 0, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -172,5 +198,13 @@ onUnmounted(() => {
   font-size: 28px;
   text-align: center;
   gap: 20px;
+}
+
+.reset-btns{
+  padding-inline: 3%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }
 </style>
