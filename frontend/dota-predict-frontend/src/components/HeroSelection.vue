@@ -20,7 +20,7 @@
               :key="attr"
               :alt="attr"
               class="attr-img"
-              :src="`/src/assets/attr/${attr}.png`"
+              :src="AttrImageSrc(attr)"
             >
             <span>{{ attrLabels[attr] }}</span>
           </div>
@@ -31,7 +31,7 @@
               :alt="hero.localized_name"
               class="hero-img"
               :class="{ 'grayscale': isHeroSelected(hero.id), 'disabled': isHeroSelected(hero.id) }"
-              :src="imageSrc(hero.id)"
+              :src="HeroImageSrc(hero.id)"
               @click="!isHeroSelected(hero.id) && props.selectHero(hero.id)"
               @mouseleave="!isHeroSelected(hero.id) && (hoveredHeroName = '')"
               @mouseover="!isHeroSelected(hero.id) && (hoveredHeroName = hero.localized_name)"
@@ -67,9 +67,14 @@
 
   const isHeroSelected = heroId => props.selectedHeroes.includes(heroId)
 
-  const imageSrc = id => {
+  const HeroImageSrc = id => {
     if (!id) return null
     return new URL(`/src/assets/heroes/bans/${id}.png`, import.meta.url).href
+  }
+
+  const AttrImageSrc = attr => {
+    if (!attr) return null
+    return new URL(`/src/assets/attr/${attr}.png`, import.meta.url).href
   }
 
   for (const hero of heroes) {
