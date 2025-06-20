@@ -1,5 +1,6 @@
 #!/bin/bash
 echo "Create migrations"
+python manage.py makemigrations predictionapp
 python manage.py makemigrations userapp
 python manage.py makemigrations matchapp
 python manage.py makemigrations heroapp

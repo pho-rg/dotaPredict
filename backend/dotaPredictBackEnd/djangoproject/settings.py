@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'userapp',
     'matchapp',
     'heroapp',
+    'predictionapp',
     'rest_framework',
     'corsheaders'
 ]

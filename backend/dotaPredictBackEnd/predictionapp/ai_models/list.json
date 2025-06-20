@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "name": "ANN",
+        "filename": "dota_ann.h5",
+        "version": 1,
+        "active": true,
+        "default": true,
+        "type": "ann"
+    },
+    {
+        "id": 2,
+        "name": "XGBoost",
+        "filename": "dota_xgboost.json",
+        "version": 1,
+        "active": true,
+        "default": false,
+        "type": "xgboost"
+    }
+]
