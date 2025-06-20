@@ -164,6 +164,9 @@ def parse_match(match_data):
     else:
         dire_team = extract_team_name(dire_team_raw)
 
+    # TODO IA model call
+    radiant_win_chance = 0
+
     # structured data for one match
     return {
         "match_id": match_data["match_id"],
@@ -173,7 +176,7 @@ def parse_match(match_data):
         "match_status": match_status,
         "pro_match": pro_match,
 
-        "radiant_win_chance": 0,
+        "radiant_win_chance": radiant_win_chance,
 
         "radiant_pick1": radiant_picks[0],
         "radiant_pick2": radiant_picks[1],
