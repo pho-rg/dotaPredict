@@ -2,7 +2,9 @@
 services:
   dotapredict-api:
     container_name: dotapredict-api
-    build: .
+    build:
+      context: .
+    command: ["/app/django.sh"]  
     ports:
       - "8000:8000"
     environment:
@@ -34,10 +36,10 @@ services:
       - "6379:6379"
 
   celery:
+    container_name: matchapp-job
     build:
       context: .
-      dockerfile: Dockerfile.celery
-    container_name: matchapp_job
+    command: ["celery", "-A", "djangoproject", "worker", "--loglevel=info", "--concurrency=4", "-E", "-B"]
     depends_on:
       - dotapredict-api
       - redis
