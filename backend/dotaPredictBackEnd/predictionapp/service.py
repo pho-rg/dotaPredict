@@ -83,8 +83,10 @@ def predict_dota_XGBoost(match, model_path):
 
     model=xgb.XGBClassifier()
     model.load_model(model_path)
+    prediction = model.predict_proba(df_match_predict)
 
-    return model.predict_proba(df_match_predict)[1]
+    return float(prediction[0][1])
+
 def predict_dota_ANN(match, model_path):
     df_match = data_frame(match)
 
@@ -95,4 +97,4 @@ def predict_dota_ANN(match, model_path):
     model = load_model(model_path)
     y_pred_proba = model.predict(df_match_predict)
 
-    return y_pred_proba
+    return float(y_pred_proba[0][0])
