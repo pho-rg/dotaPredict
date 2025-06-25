@@ -13,4 +13,5 @@ urlpatterns = [
     path('getMatchesInDraft/', views.getInDraftMatches),
     path('getMatchesWinner/', views.getMatchesWinner),
     path('saveWinnerHistory/', views.saveWinnerHistory),
+    path('getAllMatchesHistory/', views.getAllMatchesHistory),
 ]
