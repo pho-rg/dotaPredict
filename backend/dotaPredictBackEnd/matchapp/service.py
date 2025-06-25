@@ -1,5 +1,7 @@
 import requests
 
+import predictionapp.service as prediction_app_service
+
 from django.conf import settings
 from django.db import transaction
 
@@ -164,8 +166,15 @@ def parse_match(match_data):
     else:
         dire_team = extract_team_name(dire_team_raw)
 
-    # TODO IA model call
-    radiant_win_chance = 0
+    hero_picks = [radiant_picks, dire_picks]
+    default_model = prediction_app_service.get_default_model()
+    default_model_id = default_model.get("id")
+
+    if default_model and default_model_id:
+        prediction = prediction_app_service.predict_match(hero_picks, int(default_model_id))
+        radiant_win_chance = prediction.get("radiantWinChance", 0)
+    else:
+        radiant_win_chance = 0
 
     # structured data for one match
     return {

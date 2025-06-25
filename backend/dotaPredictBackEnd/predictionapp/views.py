@@ -1,6 +1,5 @@
 from django.http import JsonResponse
-from django.shortcuts import render
-from .service import get_ai_models_list, predict_match
+from .service import get_ai_models_list, predict_match, get_default_model
 from rest_framework.decorators import api_view
 
 @api_view(['GET'])
@@ -13,10 +12,9 @@ def predictMatch(request):
         # extract data from the body
         data = request.data
         hero_picks = data.get('hero_picks', [])
-        all_models = get_ai_models_list()
 
         # find AI model, default if not specified
-        default_model = next((x for x in all_models if x.get('default')), None)
+        default_model = get_default_model()
         ai_model_id = data.get('ai_model_id', default_model['id'] if default_model else None)
 
         # call prediction service

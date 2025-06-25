@@ -32,7 +32,13 @@ def get_ai_models_list(all_data=False):
                         "default": default
                     })
         return result
-    
+
+# Get the default AI model ID
+def get_default_model():
+    all_models = get_ai_models_list()
+    default_model = next((x for x in all_models if x.get('default')), None)
+    return default_model
+
 # Predict match using the selected AI model and the provided hero picks
 def predict_match(hero_picks, ai_model_id):
     # get all available AI models
