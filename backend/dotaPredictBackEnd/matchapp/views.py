@@ -80,6 +80,17 @@ def getMatchesWinner(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
+
+@api_view(['GET'])
+def getAllMatchesHistory(request):
+    try:
+        matches = Match.objects.exclude(radiant_win=-1).values()
+        transformed_matches = [transformMatchData(match) for match in matches]
+
+        return JsonResponse(transformed_matches, safe=False)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
 @api_view(['POST'])
 def saveWinnerHistory(request):
     result = updateWinnerMatches()
