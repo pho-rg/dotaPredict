@@ -11,4 +11,5 @@ urlpatterns = [
     path('getAllLive/', views.getAllLiveMatches),
     path('getOne/<str:id>/', views.getMatch),
     path('getMatchesInDraft/', views.getInDraftMatches),
+    path('getMatchesWinner/', views.getMatchesWinner),
 ]

@@ -120,6 +120,7 @@ def fetch_steam_live_league_games():
     return response.json()
 
 # Clean one match from Steam API raw object to a Match model
+# Call AI model to get prediction
 def parse_match(match_data):
     # Skip matches without scoreboard
     scoreboard = match_data.get("scoreboard")
@@ -312,3 +313,51 @@ def transformMatchData(matchData):
             matchData["dire_ban7"]
         ]
     }
+
+# Clean all opendota API matches to a list of Match history
+def get_parsed_win_history():
+    # get data from opendota API
+    pro_matches_raw_data = fetch_opendota_pro_matches_history()
+    public_matches_raw_data = fetch_opendota_public_matches_history()
+    # transform raw matches data into Match history (match_id + winner)
+    pro_parsed_matches = [parse_match_win_history(m) for m in pro_matches_raw_data]
+    public_parsed_matches = [parse_match_win_history(m) for m in public_matches_raw_data]
+    # concatenate
+    all_parsed_matches = pro_parsed_matches + public_parsed_matches
+
+    # remove empty match
+    return [m for m in all_parsed_matches if m is not None]
+
+#
+def parse_match_win_history(match):
+    match_id = match.get("match_id")
+    raw_radiant_win = match.get("radiant_win")
+
+    if match_id is None:
+        return None
+
+    if raw_radiant_win is True:
+        radiant_win = 1
+    elif raw_radiant_win is False:
+        radiant_win = 0
+    else:
+        radiant_win = -1
+
+    return {
+        "match_id": match_id,
+        "radiant_win": radiant_win,
+    }
+
+# Get list of pro matches history
+def fetch_opendota_pro_matches_history():
+    api_url = "https://api.opendota.com/api/proMatches"
+    response = requests.get(api_url, timeout=10)
+    response.raise_for_status()
+    return response.json()
+
+# Get list of public matches history
+def fetch_opendota_public_matches_history():
+    api_url = "https://api.opendota.com/api/publicMatches"
+    response = requests.get(api_url, timeout=10)
+    response.raise_for_status()
+    return response.json()
