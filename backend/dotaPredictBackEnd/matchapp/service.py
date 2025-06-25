@@ -41,6 +41,7 @@ def updateLiveMatches():
                         "pro_match": match_data["pro_match"],
 
                         "radiant_win_chance": match_data["radiant_win_chance"],
+                        "radiant_win": match_data["radiant_win"],
 
                         "radiant_pick1": match_data["radiant_pick1"],
                         "radiant_pick2": match_data["radiant_pick2"],
@@ -177,6 +178,9 @@ def parse_match(match_data):
     else:
         radiant_win_chance = 0
 
+    # unknown winner at this stage
+    radiant_win = -1
+
     # structured data for one match
     return {
         "match_id": match_data["match_id"],
@@ -187,6 +191,7 @@ def parse_match(match_data):
         "pro_match": pro_match,
 
         "radiant_win_chance": radiant_win_chance,
+        "radiant_win": radiant_win,
 
         "radiant_pick1": radiant_picks[0],
         "radiant_pick2": radiant_picks[1],
@@ -274,6 +279,7 @@ def transformMatchData(matchData):
         "match_status": matchData["match_status"],
         "pro_match": matchData["pro_match"],
         "radiant_win_chance": matchData["radiant_win_chance"],
+        "radiant_win": matchData["radiant_win"],
         
         # regroup picks in arrays
         "radiant_picks": [
@@ -314,6 +320,56 @@ def transformMatchData(matchData):
         ]
     }
 
+# Update match table
+# winner must be known if retrieve in API
+# match with no winner known must be flagged (-1)
+# changes must be saved
+# this method can be both triggered by the controller (API endpoint) or a job (scheduled)
+def updateWinnerMatches():
+    try:
+        # avoid partial update retrieve in frontend
+        with transaction.atomic():
+
+            # get the list of history matches correctly structured, based on Match model
+            parsed_win_history = get_parsed_win_history()
+            # statistics
+            updated_count = 0
+
+            # set of pinned win history matches
+            win_history_matches_ids = set()
+
+            for match_data in parsed_win_history:
+                # pin match as known win history
+                win_history_matches_ids.add(match_data['match_id'])
+
+                # update radiant_win field
+                updated_rows = Match.objects.filter(
+                    match_id=match_data["match_id"]
+                ).update(
+                    radiant_win=match_data["radiant_win"]
+                )
+                updated_count += updated_rows
+
+            # set as unknown matches which haven't been retrieve from API (not in parsed_win_history -> no winner known)
+            # store the value in not found count for statistics
+            not_found_count = Match.objects.exclude(
+                match_id__in=win_history_matches_ids
+            ).update(
+                radiant_win=-1
+            )
+
+        return {
+            "success": True,
+            "updated": updated_count,
+            "not_found": not_found_count,
+            "total": updated_count + not_found_count
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e)
+        }
+
 # Clean all opendota API matches to a list of Match history
 def get_parsed_win_history():
     # get data from opendota API
@@ -328,7 +384,7 @@ def get_parsed_win_history():
     # remove empty match
     return [m for m in all_parsed_matches if m is not None]
 
-#
+# Retrieve list of match with their id and winner (pro and public matches)
 def parse_match_win_history(match):
     match_id = match.get("match_id")
     raw_radiant_win = match.get("radiant_win")

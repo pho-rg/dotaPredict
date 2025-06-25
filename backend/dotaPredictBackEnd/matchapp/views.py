@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 
 from .models import Match
-from .service import fetch_steam_live_league_games, get_parsed_live_matches, transformMatchData, updateLiveMatches, get_parsed_win_history
+from .service import fetch_steam_live_league_games, get_parsed_live_matches, transformMatchData, updateLiveMatches, get_parsed_win_history, updateWinnerMatches
 
 @api_view(['GET'])
 #@permission_classes([IsAuthenticated])
@@ -79,3 +79,16 @@ def getMatchesWinner(request):
         return JsonResponse(matches_winner, safe=False)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
+
+@api_view(['POST'])
+def saveWinnerHistory(request):
+    result = updateWinnerMatches()
+
+    if result["success"]:
+        return JsonResponse({
+            "updated": result["updated"],
+            "not_found": result["not_found"],
+            "total": result["total"]
+        })
+    else:
+        return JsonResponse({'error': result["error"]}, status=500)
