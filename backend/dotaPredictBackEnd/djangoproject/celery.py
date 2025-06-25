@@ -11,9 +11,13 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks([])
 
 app.conf.beat_schedule = {
-    'matchAppScheduledTask-every-5-seconds': {
-        'task': 'matchapp.tasks.matchAppScheduledTask',
+    'updateMatchesScheduledTask-every-5-seconds': {
+        'task': 'matchapp.tasks.updateMatchesScheduledTask',
         'schedule': timedelta(seconds=5),
+    },
+    'updateWinnerScheduledTask-every-30-minutes': {
+        'task': 'matchapp.tasks.updateWinnerScheduledTask',
+        'schedule': timedelta(minutes=1),
     },
 }
 

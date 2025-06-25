@@ -18,6 +18,7 @@ class Match(models.Model):
     match_status = models.CharField(max_length=50, choices=MATCH_STATUS, default='draft_to_start')
     pro_match = models.BooleanField(default=False)
     radiant_win_chance = models.FloatField(default=0.5)
+    radiant_win = models.IntegerField(default=-1)
     radiant_pick1 = models.IntegerField()
     radiant_pick2 = models.IntegerField()
     radiant_pick3 = models.IntegerField()
