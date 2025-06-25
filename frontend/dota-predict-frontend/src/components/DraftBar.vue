@@ -43,18 +43,18 @@
               :class="{ 'font-weight-bold': radiantWinChance >= 50 }"
               :style="{ fontSize: predictionValueSize + 'px'}"
             >
-              {{ (radiantWinChance*100).toFixed(2) }} %
+              {{ Math.round(radiantWinChance * 100) / 100 }} %
             </span>
             <span
               class="prediction-text"
               :class="{ 'font-weight-bold': radiantWinChance < 50 }"
               :style="{ fontSize: predictionValueSize + 'px'}"
             >
-              {{ (100 - (radiantWinChance*100)).toFixed(2) }} %
+              {{ Math.round((100 - radiantWinChance) * 100) / 100}} %
             </span>
           </div>
           <div class="prediction-bar" :style="{ height: predictionBarHeight + 'px'}">
-            <div class="prediction-fill" :style="{ width: (radiantWinChance*100) + '%' }" />
+            <div class="prediction-fill" :style="{ width: radiantWinChance + '%' }" />
           </div>
         </div>
       </v-col>

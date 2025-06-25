@@ -12,7 +12,52 @@
         </v-btn>
       </div>
 
-      <span class="title"><v-icon icon="mdi-information-outline" size="38" />Add / Edit heroes in the draft to update the AI prediction</span>
+      <div class="middle-wrapper">
+        <div class="middle-section">
+          <v-select
+            v-model="selectedModelId"
+            :items="modelsList"
+            item-value="id"
+            label="AI Model"
+            variant="outlined"
+            density="comfortable"
+            hide-details
+            class="model-select"
+          >
+            <template v-slot:item="{ props, item }">
+              <v-list-item v-bind="props" title="">
+                <template v-slot:prepend>
+                  <span>{{ item.raw.name }}</span>
+                  <v-chip
+                      class="ml-2"
+                      size="small"
+                      color="grey lighten-1"
+                      text-color="black"
+                      label
+                    >
+                      v{{ item.raw.version }}
+                  </v-chip>
+                </template>
+              </v-list-item>
+            </template>
+            <template v-slot:selection="{ item }">
+              <span>{{ item.raw.name }}</span>
+              <v-chip
+                  class="ml-2"
+                  size="small"
+                  color="grey lighten-1"
+                  text-color="black"
+                  label
+                  style="font-size: 16px;"
+                >
+                  v{{ item.raw.version }}
+              </v-chip>
+            </template>
+          </v-select>
+          <span class="title"><v-icon icon="mdi-information-outline" size="32" />Add / Edit heroes in the draft to update the AI prediction</span>
+      </div>
+      </div>
+      
 
       <div v-if="heroSelection" class="hero-selection-overlay">
         <HeroSelection
@@ -65,6 +110,38 @@
   import HeaderBar from '@/components/HeaderBar.vue'
   import router from '../router/index.js'
   import DraftBar from '/src/components/DraftBar.vue'
+  import { watch } from 'vue'
+  import { getAvailableModels, predictMatch } from '@/service/predictionService.js'
+
+  const selectedModelId = ref(0)
+  const modelsList = ref([])
+
+  const fetchModelsList = async () => {
+    // Fetch the list of models from the backend
+    try {
+      const list = await getAvailableModels()
+      modelsList.value = list
+      if (list.length > 0) {
+        for (const model of list) {
+          if (model.default === true) {
+            selectedModelId.value = model.id
+            break;
+          }
+        }
+        if (selectedModelId.value === 0) {
+          console.warn('No default model found, using first model in the list.')
+          selectedModelId.value = list[0].id
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching models:', error)
+    }
+  }
+
+  // Watch for changes in the selected model ID and update the prediction accordingly
+  watch(selectedModelId, async () => {
+    await updatePrediction(draftBarData.value.radiantPicks, draftBarData.value.direPicks)
+  })
 
   const isWideEnough = ref(window.innerWidth >= 1024)
   const isTallEnough = ref(window.innerHeight >= 500)
@@ -97,7 +174,22 @@
 
   const updatePrediction = async (radiantPicks, direPicks) => {
     // call api to predict with ai model
-    draftBarData.value.radiantWinChance = Math.floor(Math.random() * 100) + 1 // TEMPORARY
+    try {
+      const picksData = [draftBarData.value.radiantPicks.map(num => num < 0 ? 0 : num), draftBarData.value.direPicks.map(num => num < 0 ? 0 : num)]
+      const response = await predictMatch(
+        {
+          "hero_picks": picksData,
+          "ai_model_id": selectedModelId.value
+        }
+      )
+      if (response) {
+        draftBarData.value.radiantWinChance = response.radiantWinChance * 100
+      } else {
+        console.error('Invalid prediction response:', response)
+      }
+    } catch (error) {
+      console.error('Error updating prediction:', error)
+    }
   }
 
   const draftBarData = ref({
@@ -127,7 +219,8 @@
 
   onMounted(async () => {
     window.addEventListener('resize', updateWindowSize)
-    updateWindowSize ()
+    updateWindowSize()
+    await fetchModelsList()
   })
 
   onUnmounted(() => {
@@ -195,9 +288,9 @@
   justify-content: center;
   align-items: center;
   font-family: 'Mohave', sans-serif;
-  font-size: 28px;
+  font-size: 24px;
   text-align: center;
-  gap: 20px;
+  gap: 16px;
 }
 
 .reset-btns{
@@ -206,5 +299,35 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+}
+
+.middle-wrapper {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 16px;
+}
+
+.middle-section {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+}
+
+.model-select {
+  font-family: 'Mohave', sans-serif;
+  width: 300px;
+}
+
+.model-select ::v-deep(.v-field__input) {
+  font-size: 20px;
+}
+
+.model-select ::v-deep(.v-label) {
+  font-size: 16px;
 }
 </style>
