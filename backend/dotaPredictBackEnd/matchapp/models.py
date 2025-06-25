@@ -42,3 +42,4 @@ class Match(models.Model):
     dire_ban5 = models.IntegerField()
     dire_ban6 = models.IntegerField()
     dire_ban7 = models.IntegerField()
+    radiant_win = models.IntegerField()

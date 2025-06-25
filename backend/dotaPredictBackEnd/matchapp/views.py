@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 
 from .models import Match
-from .service import fetch_steam_live_league_games, get_parsed_live_matches, transformMatchData, updateLiveMatches
+from .service import fetch_steam_live_league_games, get_parsed_live_matches, transformMatchData, updateLiveMatches, get_parsed_win_history
 
 @api_view(['GET'])
 #@permission_classes([IsAuthenticated])
@@ -69,5 +69,13 @@ def getInDraftMatches(request):
         matches = Match.objects.filter(draft_in_progress=True).values()
         transformed_matches = [transformMatchData(match) for match in matches]
         return JsonResponse(transformed_matches, safe=False)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+@api_view(['GET'])
+def getMatchesWinner(request):
+    try:
+        matches_winner = get_parsed_win_history()
+        return JsonResponse(matches_winner, safe=False)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
