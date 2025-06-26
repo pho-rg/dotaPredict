@@ -1,0 +1,70 @@
+version: '3.9'
+
+services:
+  dotapredict-api:
+    image: dotapredict-api
+    build:
+      context: ./backend/dotaPredictBackEnd
+    command: ["/app/django.sh"]
+    ports:
+      - "8000:8000"
+    environment:
+      - DOTAPREDICT_USER=postgres
+      - DOTAPREDICT_PASSWORD=postgres
+      - DOTAPREDICT_DB=postgres
+      - DOTAPREDICT_HOST=db
+      - DOTAPREDICT_PORT=5432
+    depends_on:
+      - db
+      - redis
+    networks:
+      - app-net
+
+  db:
+    image: postgres:12
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app-net
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    networks:
+      - app-net
+
+  celery:
+    image: dotapredict-api
+    build:
+      context: ./backend/dotaPredictBackEnd
+    command: ["celery", "-A", "djangoproject", "worker", "--loglevel=info", "--concurrency=4", "-E", "-B"]
+    depends_on:
+      - dotapredict-api
+      - redis
+    env_file:
+      - ./backend/dotaPredictBackEnd/.env
+    networks:
+      - app-net
+
+  frontend:
+    image: dota-predict-frontend
+    build:
+      context: ./frontend/dota-predict-frontend
+    ports:
+      - "3000:80"
+    networks:
+      - app-net
+
+volumes:
+  pgdata: {}
+
+networks:
+  app-net:
+    driver: overlay

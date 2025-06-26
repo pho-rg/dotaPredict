@@ -124,6 +124,7 @@
     const matchId = route.params.matchId
     const matchData = await getOneMatch(matchId)
     matchEnded.value = (matchData.match_status === 'match_ended')
+    radiantWin.value = (matchData.radiant_win === 1)
     draftBarData.value = generateDraftBarData(matchData)
     if (!matchData.draft_in_progress && intervalId) { // stop updating if draft is done
       clearInterval(intervalId)

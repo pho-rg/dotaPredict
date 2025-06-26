@@ -120,7 +120,7 @@
 <script setup>
   import { computed, onMounted, onUnmounted, ref } from 'vue'
   import router from '../router/index.js'
-  import { getAllLiveMatches } from '../service/matchService.js'
+  import { getAllLiveMatches, getAllMatchesHistory } from '../service/matchService.js'
 
   const archivedMode = ref(false)
 
@@ -128,6 +128,7 @@
   const archivedMatches = ref([])
 
   let intervalId = null
+  let archiveIntervalId = null
 
   const matchStatusLabel = {
     draft_to_start: 'Draft to start',
@@ -164,7 +165,7 @@
 
   const fetchArchivedMatches = async () => {
     try {
-      const data = getAllMatchesHistory()
+      const data = await getAllMatchesHistory()
       archivedMatches.value = data
     } catch (error) {
       console.error('Failed to fetch archived matches', error)
@@ -182,11 +183,13 @@
   onMounted(async () => {
     await fetchMatches()
     await fetchArchivedMatches()
-    intervalId = setInterval(fetchMatches, 5000) // update match list every 5s
+    intervalId = setInterval(fetchMatches, 2000) // update match list every 2s
+    archiveIntervalId = setInterval(fetchArchivedMatches, 10000) // update match list every 10s
   })
 
   onUnmounted(() => {
     if (intervalId) clearInterval(intervalId)
+    if (archiveIntervalId) clearInterval(archiveIntervalId)
   })
 </script>
 <style scoped>
