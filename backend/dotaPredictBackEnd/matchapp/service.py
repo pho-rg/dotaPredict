@@ -351,8 +351,11 @@ def updateWinnerMatches():
                 updated_count += updated_rows
 
             # set as unknown matches which haven't been retrieve from API (not in parsed_win_history -> no winner known)
+            # filter only on unknown winner matches to no crush old known winner matches
             # store the value in not found count for statistics
-            not_found_count = Match.objects.exclude(
+            not_found_count = Match.objects.filter(
+                radiant_win=-1
+            ).exclude(
                 match_id__in=win_history_matches_ids
             ).update(
                 radiant_win=-1

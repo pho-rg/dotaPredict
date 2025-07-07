@@ -17,7 +17,7 @@ app.conf.beat_schedule = {
     },
     'updateWinnerScheduledTask-every-30-minutes': {
         'task': 'matchapp.tasks.updateWinnerScheduledTask',
-        'schedule': timedelta(minutes=1),
+        'schedule': timedelta(minutes=5),
     },
 }
 
