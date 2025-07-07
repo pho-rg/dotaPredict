@@ -1,12 +1,17 @@
 from django.http import JsonResponse
 from .service import get_ai_models_list, predict_match, get_default_model
-from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
+
+from userapp.permissions import IsAnalyst
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated, IsAnalyst])
 def getAvailableModels(request):
     return JsonResponse(get_ai_models_list(), safe=False)
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated, IsAnalyst])
 def predictMatch(request):
     try:
         # extract data from the body
