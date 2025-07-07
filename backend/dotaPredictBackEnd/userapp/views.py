@@ -1,17 +1,19 @@
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticated
+
+from rest_framework.decorators import api_view, permission_classes
 
 from django.contrib.auth.hashers import make_password
 from rest_framework_simplejwt.tokens import AccessToken
 from django.contrib.auth.hashers import check_password
 
-
-
 from .models import User
 from .serializers import UserSerializer
+from .permissions import IsAnalyst
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated, IsAnalyst])
 def getUsers(request):
     try:
         users = User.objects.values('name', 'email', 'role')
@@ -21,6 +23,7 @@ def getUsers(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated, IsAnalyst])
 def getUser(request, pk):
     try:
         user = User.objects.filter(id=pk).values('name', 'email', 'role').first()
@@ -32,6 +35,7 @@ def getUser(request, pk):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated, IsAnalyst])
 def createUser(request):
     try:
         data = request.data.copy()
@@ -47,6 +51,7 @@ def createUser(request):
 
 
 @api_view(['PUT'])
+@permission_classes([IsAuthenticated, IsAnalyst])
 def updateUser(request, pk):
     try:
         user = User.objects.get(id=pk)
@@ -67,6 +72,7 @@ def updateUser(request, pk):
 
 
 @api_view(['DELETE'])
+@permission_classes([IsAuthenticated, IsAnalyst])
 def deleteUser(request, pk):
     try:
         user = User.objects.get(id=pk)

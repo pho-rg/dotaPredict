@@ -2,11 +2,13 @@ from django.http import JsonResponse
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 
+from userapp.permissions import IsAnalyst
+
 from .models import Match
 from .service import fetch_steam_live_league_games, get_parsed_live_matches, transformMatchData, updateLiveMatches, get_parsed_win_history, updateWinnerMatches
 
 @api_view(['GET'])
-#@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def steamGetLiveLeagueGames(request):
     try:
         data = fetch_steam_live_league_games()
@@ -15,6 +17,7 @@ def steamGetLiveLeagueGames(request):
         return JsonResponse({'error': str(e)}, status=500)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def getParsedLiveMatches(request):
     try:
         parsed_matches = get_parsed_live_matches()
@@ -23,6 +26,7 @@ def getParsedLiveMatches(request):
         return JsonResponse({'error': str(e)}, status=500)
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def saveLiveMatches(request):
     result = updateLiveMatches()
 
@@ -36,6 +40,7 @@ def saveLiveMatches(request):
         return JsonResponse({'error': result["error"]}, status=500)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def getMatches(request):
     try:
         matches = Match.objects.all().values()
@@ -45,6 +50,7 @@ def getMatches(request):
         return JsonResponse({'error': str(e)}, status=500)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def getAllLiveMatches(request):
     try:
         matches = Match.objects.exclude(match_status="match_ended").values()
@@ -54,6 +60,7 @@ def getAllLiveMatches(request):
         return JsonResponse({'error': str(e)}, status=500)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def getMatch(request, id):
     try:
         match = Match.objects.filter(match_id=id).values().first()
@@ -64,6 +71,7 @@ def getMatch(request, id):
         return JsonResponse({'error': str(e)}, status=500)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def getInDraftMatches(request):
     try:
         matches = Match.objects.filter(draft_in_progress=True).values()
@@ -73,6 +81,7 @@ def getInDraftMatches(request):
         return JsonResponse({'error': str(e)}, status=500)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated, IsAnalyst])
 def getMatchesWinner(request):
     try:
         matches_winner = get_parsed_win_history()
@@ -82,6 +91,7 @@ def getMatchesWinner(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated, IsAnalyst])
 def getAllMatchesHistory(request):
     try:
         matches = Match.objects.exclude(radiant_win=-1).values()
@@ -92,6 +102,7 @@ def getAllMatchesHistory(request):
         return JsonResponse({'error': str(e)}, status=500)
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated, IsAnalyst])
 def saveWinnerHistory(request):
     result = updateWinnerMatches()
 
