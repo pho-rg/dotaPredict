@@ -64,6 +64,8 @@ def predict_match(hero_picks, ai_model_id):
             prediction = predict_dota_ANN(hero_picks, model_path)
         case "multiScale":
             prediction = predict_dota_multiscale(hero_picks, model_path)
+        case "annRich":
+            prediction = predict_dota_ANN_rich(hero_picks, model_path)
         case _:
             return {"error": "Model not found or not implemented."}
 
@@ -113,7 +115,18 @@ def predict_dota_ANN(match, model_path):
 
 def predict_dota_multiscale(hero_picks, model_path):
     full_heroes_array = create_picks_vector(hero_picks)
-    print("full_heroes_array: ", full_heroes_array)
+    heroes_characteristics = create_hero_characteristics_vector(hero_picks)
+
+    predict_data = [full_heroes_array, heroes_characteristics]
+
+    model = load_model(model_path, compile=False)
+    y_pred_proba = model.predict([full_heroes_array, heroes_characteristics])
+
+    return float(y_pred_proba[0][0])
+
+def predict_dota_ANN_rich(hero_picks, model_path):
+    return 0.5
+    full_heroes_array = create_picks_vector(hero_picks)
     heroes_characteristics = create_hero_characteristics_vector(hero_picks)
     print("heroes_characteristics: ", heroes_characteristics)
 
@@ -123,7 +136,7 @@ def predict_dota_multiscale(hero_picks, model_path):
     print("model path", model_path)
     model = load_model(model_path, compile=False)
     print("model loaded")
-    y_pred_proba = model.predict([full_heroes_array, heroes_characteristics])
+    y_pred_proba = model.predict(predict_data)
 
     print("pred_proba", float(y_pred_proba[0][0]))
     return float(y_pred_proba[0][0])

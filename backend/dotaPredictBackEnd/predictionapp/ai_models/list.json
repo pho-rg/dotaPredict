@@ -34,5 +34,14 @@
         "active": true,
         "default": true,
         "type": "multiScale"
+    },
+    {
+        "id": 5,
+        "name": "ANN heroes-focus",
+        "filename": "dota_ann_rich.keras",
+        "version": 2,
+        "active": true,
+        "default": false,
+        "type": "annRich"
     }
 ]
