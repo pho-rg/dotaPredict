@@ -8,6 +8,31 @@
 
 > Frontend .env file filled based on .template `frontend/dota-predict-frontend/.template` (ask for value)
 
+### Launch via docker swarm 
+
+Initiate the swarm (in root path) :
+```
+docker swarm init
+```
+Build frontend image **(needed every time the code is updated)** :
+```
+docker build -t dota-predict-frontend:latest ./frontend/dota-predict-frontend
+(only for updates) docker service update --force dota-predict_frontend
+```
+Build backend image **(needed every time the code is updated)** :
+```
+docker build -t dotapredict-api:latest ./backend/dotaPredictBackEnd
+(only for updates) docker service update --force dota-predict_dotapredict-api
+```
+Deploy stack with built images :
+```
+docker stack deploy -c docker-compose.yml dota-predict
+```
+Remove stack:
+```
+docker stack rm dota-predict
+```
+
 ### Launch dotapredict API
 
 Folder

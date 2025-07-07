@@ -350,6 +350,78 @@
 					"response": []
 				},
 				{
+					"name": "getAllMatchesHistory",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/match/getAllMatchesHistory/",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"match",
+								"getAllMatchesHistory",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getMatchesWinner",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/match/getMatchesWinner/",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"match",
+								"getMatchesWinner",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "saveWinnerHistory",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/match/saveWinnerHistory/",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"match",
+								"saveWinnerHistory",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "getMatchInDraft",
 					"request": {
 						"auth": {
@@ -615,6 +687,61 @@
 								"api",
 								"hero",
 								"saveHeroes",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Prediction",
+			"item": [
+				{
+					"name": "getAvailableModels",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/prediction/getAvailableModels",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"prediction",
+								"getAvailableModels"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "predictMatch",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"hero_picks\": [[38,103,27,94,55],[1,2,3,4,5]]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/prediction/predictMatch/",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"prediction",
+								"predictMatch",
 								""
 							]
 						}

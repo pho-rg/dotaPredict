@@ -12,6 +12,16 @@ export const getAllLiveMatches = async () => {
   }
 }
 
+export const getAllMatchesHistory = async () => {
+  try {
+    const response = await axios.get(MATCH_URL + 'getAllMatchesHistory/')
+    return response.data
+  } catch (error) {
+    console.error('Failed to fetch matches history', error)
+    throw error
+  }
+}
+
 export const getOneMatch = async matchId => {
   try {
     const response = await axios.get(MATCH_URL + 'getOne/' + matchId)

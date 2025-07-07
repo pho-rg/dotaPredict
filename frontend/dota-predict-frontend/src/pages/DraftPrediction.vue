@@ -12,7 +12,15 @@
         </v-btn>
       </div>
 
-      <div v-if="isTallEnough" class="twitch-embed">
+      <div v-if="isTallEnough && matchEnded" class="center-content" style="display: flex; flex-direction: column; gap: 10px;">
+        <span class="result-title">MATCH FINISHED</span>
+        <span class="result-text" style="display: flex; flex-direction: row; gap: 5px;">
+          Winner : 
+          <span class="team-title">{{ radiantWin ? 'RADIANT' : 'DIRE'}}</span>
+        </span>
+      </div>
+
+      <div v-if="isTallEnough && !matchEnded" class="center-content">
         <div v-if="!iframeSrc" class="livestream-integration">
           <span class="twitch-embed-title">IMPORT TWITCH LIVESTREAM</span>
           <div class="livestream-inputs">
@@ -88,6 +96,8 @@
 
   const isWideEnough = ref(window.innerWidth >= 1024)
   const isTallEnough = ref(window.innerHeight >= 500)
+  const matchEnded = ref(false)
+  const radiantWin = ref(false)
 
   let intervalId = null
 
@@ -113,6 +123,8 @@
   const fetchMatchData = async () => {
     const matchId = route.params.matchId
     const matchData = await getOneMatch(matchId)
+    matchEnded.value = (matchData.match_status === 'match_ended')
+    radiantWin.value = (matchData.radiant_win === 1)
     draftBarData.value = generateDraftBarData(matchData)
     if (!matchData.draft_in_progress && intervalId) { // stop updating if draft is done
       clearInterval(intervalId)
@@ -196,7 +208,7 @@
   margin-left: 1.5%;
 }
 
-.twitch-embed {
+.center-content {
   flex-grow: 1;
   display: flex;
   justify-content: center;
@@ -207,6 +219,19 @@
 .twitch-embed-title{
   font-family: 'Mohave', sans-serif;
   font-size: 28px;
+  margin-bottom: 15px;
+}
+
+.result-title {
+  font-family: 'Mohave', sans-serif;
+  font-size: 36px;
+  margin-bottom: 15px;
+  border-bottom: 2px solid white;
+}
+
+.result-text {
+  font-family: 'Mohave', sans-serif;
+  font-size: 30px;
   margin-bottom: 15px;
 }
 
@@ -289,4 +314,9 @@ input::placeholder {
 .fullscreen-btn {
   top: 35px;
 }
+
+.team-title {
+    font-weight: bold;
+    color: #ca4b4d;
+  }
 </style>
