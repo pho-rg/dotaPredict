@@ -5,7 +5,7 @@
         "filename": "dota_ann.h5",
         "version": 1,
         "active": true,
-        "default": true,
+        "default": false,
         "type": "ann"
     },
     {
@@ -16,5 +16,23 @@
         "active": true,
         "default": false,
         "type": "xgboost"
+    },
+    {
+        "id": 3,
+        "name": "MS Overall",
+        "filename": "dota_multiscale_overall.keras",
+        "version": 1,
+        "active": true,
+        "default": false,
+        "type": "multiScale"
+    },
+    {
+        "id": 4,
+        "name": "MS Confident",
+        "filename": "dota_multiscale_confident.keras",
+        "version": 1,
+        "active": true,
+        "default": true,
+        "type": "multiScale"
     }
 ]

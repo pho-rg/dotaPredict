@@ -28,6 +28,10 @@ Deploy stack with built images :
 ```
 docker stack deploy -c docker-compose.yml dota-predict
 ```
+Remove stack:
+```
+docker stack rm dota-predict
+```
 
 ### Launch dotapredict API
 
