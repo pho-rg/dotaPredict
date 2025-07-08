@@ -33,6 +33,13 @@ Remove stack:
 docker stack rm dota-predict
 ```
 
+### Set a user's role to 'analyst'
+
+> Open the terminal of the "db" docker
+> psql -U <username> -d <dbname> (check the .env file)
+> find the user to edit with ```SELECT * FROM "userapp_user";```
+> execute ```UPDATE "userapp_user" SET role = 'analyst' WHERE id = <id>;```
+
 ### Launch dotapredict API
 
 Folder

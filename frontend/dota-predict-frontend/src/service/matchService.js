@@ -4,7 +4,14 @@ const MATCH_URL = import.meta.env.VITE_API_URL + 'match/'
 
 export const getAllLiveMatches = async () => {
   try {
-    const response = await axios.get(MATCH_URL + 'getAllLive/')
+    const token = localStorage.getItem('token')
+    const response = await axios.get(MATCH_URL + 'getAllLive/',
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
     return response.data
   } catch (error) {
     console.error('Failed to fetch matches', error)
@@ -14,7 +21,14 @@ export const getAllLiveMatches = async () => {
 
 export const getAllMatchesHistory = async () => {
   try {
-    const response = await axios.get(MATCH_URL + 'getAllMatchesHistory/')
+    const token = localStorage.getItem('token')
+    const response = await axios.get(MATCH_URL + 'getAllMatchesHistory/',
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
     return response.data
   } catch (error) {
     console.error('Failed to fetch matches history', error)
@@ -24,7 +38,14 @@ export const getAllMatchesHistory = async () => {
 
 export const getOneMatch = async matchId => {
   try {
-    const response = await axios.get(MATCH_URL + 'getOne/' + matchId)
+    const token = localStorage.getItem('token')
+    const response = await axios.get(MATCH_URL + 'getOne/' + matchId,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
     return response.data
   } catch (error) {
     console.error('Failed to retrieve live matches', error)

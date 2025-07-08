@@ -3,7 +3,9 @@ import { jwtDecode } from 'jwt-decode'
 export function isAuthenticated () {
   // check expiration date
   const token = localStorage.getItem('token')
-  if (!token) return false
+  if (!token) {
+    return false
+  }
   const decoded = jwtDecode(token)
   const currentTime = Math.floor(Date.now() / 1000) // en secondes
   return decoded.exp > currentTime
