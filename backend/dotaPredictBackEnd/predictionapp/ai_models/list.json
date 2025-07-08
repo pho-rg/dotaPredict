@@ -4,7 +4,7 @@
         "name": "ANN",
         "filename": "dota_ann.h5",
         "version": 1,
-        "active": true,
+        "active": false,
         "default": false,
         "type": "ann"
     },
@@ -43,5 +43,14 @@
         "active": true,
         "default": false,
         "type": "annRich"
+    },
+    {
+        "id": 6,
+        "name": "ANN",
+        "filename": "dota_ann_v2.h5",
+        "version": 2,
+        "active": true,
+        "default": false,
+        "type": "ann"
     }
 ]
