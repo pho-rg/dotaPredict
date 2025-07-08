@@ -1,5 +1,7 @@
 import json
 import pandas as pd
+from keras.src.callbacks import EarlyStopping
+from keras.src.optimizers import Adam
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, classification_report
 from tensorflow.keras.models import Sequential
@@ -42,7 +44,8 @@ def main():
     dfTestMatch = pd.concat([df_testM_match_radiant, df_testM_match_dire], axis=1)
 
 
-    matches = openJson(r"C:\Users\issam\Documents\ProjetAnnuelAI\DotaMatchsData\SauvgardeProMatchs2025-05-21.json")
+    #matches = openJson(r"C:\Users\issam\Documents\ProjetAnnuelAI\DotaMatchsData\SauvgardeProMatchs2025-05-21.json")
+    matches = openJson(r"C:\Users\issam\Documents\ProjetAnnuelAI\DotaMatchsData\processed_matches.json")
     df = pd.DataFrame(matches)
 
     df_transformedRadiant = df.apply(lambda row: transformationHeroes(row, 'picks_id_team_0', 'radiant'), axis=1)
@@ -56,15 +59,26 @@ def main():
     X_train , X_test, y_train, y_test = train_test_split(X, y, test_size=0.2,random_state=42)
 
     model = Sequential()
-    model.add(Dense(256, activation='relu', input_shape=(292,)))
-    model.add(Dropout(0.3))  # régularisation
-    model.add(Dense(128, activation='relu'))
+
+    model.add(Dense(64, activation='relu', input_shape=(292,)))
+    model.add(Dropout(0.3))
+    model.add(Dense(32, activation='relu'))
     model.add(Dropout(0.2))
+    model.add(Dense(32, activation='relu'))
+    model.add(Dropout(0.2))
+    model.add(Dense(32, activation='relu'))
     model.add(Dense(1, activation='sigmoid'))
 
-    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+    model.compile(optimizer='adam',
+                  loss='binary_crossentropy',
+                  metrics=['accuracy'])
 
-    model.fit(X_train, y_train, epochs=20, batch_size=8, verbose=1)
+    early_stop = EarlyStopping(monitor='val_loss', patience=3, restore_best_weights=True)
+    model.fit(X_train, y_train,
+              validation_data=(X_test, y_test),
+              epochs=20, batch_size=16,
+              callbacks=[early_stop], verbose=1)
+
     model.save("dota_ann.h5")
 
     y_pred_proba = model.predict(X_test)
